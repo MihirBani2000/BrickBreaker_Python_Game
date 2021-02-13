@@ -1,7 +1,4 @@
-import numpy as np
-
 from config import *
-
 
 class Box:
     ''' Creates the background of the game

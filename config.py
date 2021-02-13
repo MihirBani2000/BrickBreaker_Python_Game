@@ -1,19 +1,18 @@
 import os
+import numpy as np
 from colorama import Fore, init, Back, Style
 
 init()
 
-# DEBUG = 'a'
 
 # sizes
 HEIGHT = 30
-# MAXWIDTH = 120
 WIDTH = 120
-# PLACEWIDTH = 40
-# LWall = 2
-# RWall = 2
-# TWall = 
-# Bottom = 3
+LEFTWALL = 2
+RIGHTWALL = 2
+TOPWALL = 1
+BOX_WIDTH = WIDTH - RIGHTWALL 
+# Bottom = 
 
 # text styles
 BOLD = "\033[1m"
@@ -28,7 +27,8 @@ RED = Fore.RED
 BLUE = Fore.BLUE
 GCOLOR = Fore.LIGHTGREEN_EX+Back.GREEN
 WHITE = Fore.WHITE
-ICE = Fore.CYAN
+MAGENTA = Fore.MAGENTA
+CYAN = Fore.CYAN
 
 
 # misc

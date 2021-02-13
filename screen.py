@@ -1,5 +1,3 @@
-import numpy as np
-
 from config import *
 
 
@@ -21,12 +19,11 @@ class Screen:
     def getColumns(self):
         return self.__columns
 
-
     def printGrid(self):
         '''Prints the whole grid'''
 
         for i in range(self.__rows):
             for j in range(self.__columns):
-                # print(Back.CYAN+self.grid[i][j]+Back.RESET, end='')
                 print(BOLD + self.__grid[i][j], end='')
             print()
+
