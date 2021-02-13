@@ -11,8 +11,8 @@ WIDTH = 120
 LEFTWALL = 2
 RIGHTWALL = 2
 TOPWALL = 1
-BOX_WIDTH = WIDTH - RIGHTWALL 
-# Bottom = 
+BOX_WIDTH = WIDTH - RIGHTWALL
+# Bottom =
 
 # text styles
 BOLD = "\033[1m"
@@ -22,10 +22,11 @@ UNDERLINED = "\033[4m"
 # colors
 RESET = Style.RESET_ALL
 GREY = Fore.LIGHTBLACK_EX
-CYAN = Fore.LIGHTCYAN_EX+Back.CYAN
+CYAN = Fore.LIGHTCYAN_EX + Back.CYAN
 RED = Fore.RED
+YELLOW = Fore.YELLOW
 BLUE = Fore.BLUE
-GCOLOR = Fore.LIGHTGREEN_EX+Back.GREEN
+GCOLOR = Fore.LIGHTGREEN_EX + Back.GREEN
 WHITE = Fore.WHITE
 MAGENTA = Fore.MAGENTA
 CYAN = Fore.CYAN
@@ -62,7 +63,6 @@ def showmessage(msg, obj_mando=None):
               "\t\t\t|   ||  ||       ||       ||    ___|  |  |_|  ||       ||    ___||    __  |\n" +
               "\t\t\t|   |_| ||   _   || ||_|| ||   |___   |       | |     | |   |___ |   |  | |\n" +
               "\t\t\t|_______||__| |__||_|   |_||_______|  |_______|  |___|  |_______||___|  |_|\n")
-
 
     elif msg == "Quit":
         print("\t\t\t __   __  _______  __   __    _______  __   __  ___   _______ \n" +

@@ -9,11 +9,11 @@ class Paddle():
         self.__y = y
 
         self.__oldx = 0
-        
+
         # step length while moving
-        self.__stepX = 2
-        
-        self.__length = 5
+        self.__stepX = 3
+
+        self.__length = 7
         self.__fig = np.full(
             (1, self.__length), MAGENTA + '=' + RESET, dtype='<U20')
         # self.__fig = MAGENTA + '=' + RESET
@@ -24,16 +24,19 @@ class Paddle():
 
     def getPosY(self):
         return self.__y
-        
+
+    def getLength(self):
+        return self.__length
+
     # def updateOldX(self):
     #     self.__oldx = self.__x
 
-    def erasePaddle(self,grid):
-        x ,y= self.__x,self.__y
-        grid[y,x:x+self.__length] = ' '
+    def erasePaddle(self, grid):
+        x, y = self.__x, self.__y
+        grid[y, x:x + self.__length] = ' '
 
     def placePaddle(self, grid, x):
-        
+
         if x < LEFTWALL:
             x = LEFTWALL
         elif x > BOX_WIDTH - self.__length:
@@ -43,11 +46,11 @@ class Paddle():
         grid[self.__y, x:x + self.__length] = self.__fig
 
     def moveRight(self, grid):
-        newX = self.__x+self.__stepX
+        newX = self.__x + self.__stepX
         self.erasePaddle(grid)
-        self.placePaddle(grid,newX)
+        self.placePaddle(grid, newX)
 
     def moveLeft(self, grid):
-        newX = self.__x-self.__stepX
+        newX = self.__x - self.__stepX
         self.erasePaddle(grid)
-        self.placePaddle(grid,newX)
+        self.placePaddle(grid, newX)
