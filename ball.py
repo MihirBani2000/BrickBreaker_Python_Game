@@ -68,22 +68,20 @@ class Ball():
             speedY = -speedY
 
         self.__speedX, self.__speedY = speedX, speedY
-        return x,y
+        # self.__x,self.__y = x,y
+        return x, y
 
-    def checkCollisionPaddle(self,x, y, paddle):
+    def checkCollisionPaddle(self, x, y, paddle):
         pX = paddle.getPosX()
         pL = paddle.getLength()
-        # x, y = self.__x, self.__y
         speedX, speedY = self.__speedX, self.__speedY
 
-        if pX <= x <= pX + pL - 1:
+        if pX <= x <= pX + pL:
             # within the paddle x coordinates
             if y > HEIGHT - 3:
                 # Colliding with the paddle
-                # speedX changed according to the position of contact wrt to
-                # the mid of paddle
+                # speedX changed according to the position of contact wrt to the mid of paddle
                 speedX -= (pX + int(pL / 2) - x)
-                # speedX -= int((pX + (pL / 2) - x)/1.5)
                 speedY = -speedY
                 y = HEIGHT - 3
                 self.__y = y
@@ -92,15 +90,16 @@ class Ball():
             print("ball down")
             # ball crossed the paddle
             # life lost
+            # showmessage("Quit")
 
         self.__speedX, self.__speedY = speedX, speedY
-        # self.__x, self.__y = x, y
+        self.__x, self.__y = x, y
         return x,y
 
     def placeBall(self, grid, x, y, paddle):
 
-        # x,y = self.checkCollisionWall(x, y)
-        # x,y = self.checkCollisionPaddle(x,y,paddle)
+        x,y = self.checkCollisionWall(x, y)
+        x,y = self.checkCollisionPaddle(x,y,paddle)
 
         grid[y, x] = self.__fig
 
@@ -108,12 +107,12 @@ class Ball():
         if self.__onPaddle:
             # dont do anything if the ball is on the paddle
             return
+
         self.updateOld()
         newX = self.__x + self.__speedX
         newY = self.__y + self.__speedY
         self.eraseBall(grid)
         self.placeBall(grid, newX, newY, paddle)
-        # showmessage("Quit")
 
     def moveWithPaddle(self, grid, x):
         self.updateOld()

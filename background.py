@@ -9,7 +9,7 @@ class Box:
     '''
 
     def __init__(self):
-        self.__wallDepth = RIGHTWALL
+        self.__wallDepth = 2
         self.__leftWall = BLUE + '|' + RESET
         self.__rightWall = BLUE + '|' + RESET
         self.__topWall = BLUE + '_' + RESET

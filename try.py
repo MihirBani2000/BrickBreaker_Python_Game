@@ -20,16 +20,17 @@ ICE = Fore.CYAN
 #     print()
 # print(Back.RESET)
 
-a = np.full((5,5),'-', dtype='<U20')
-def printGrid():
-    for i in range(a.shape[0]):
-        for j in range(a.shape[1]):
-            print(a[i,j],end=' ')
-        print()
+# a = np.full((5,5),'-', dtype='<U20')
+# def printGrid():
+#     for i in range(a.shape[0]):
+#         for j in range(a.shape[1]):
+#             print(a[i,j],end=' ')
+#         print()
 
-printGrid()
-print()
+# printGrid()
+# print()
 
-a[1:3,2:3] = 'a'
+# a[1:3,2:3] = 'a'
 
-printGrid()
+# printGrid()
+

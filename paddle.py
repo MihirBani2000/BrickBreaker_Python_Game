@@ -28,9 +28,6 @@ class Paddle():
     def getLength(self):
         return self.__length
 
-    # def updateOldX(self):
-    #     self.__oldx = self.__x
-
     def erasePaddle(self, grid):
         x, y = self.__x, self.__y
         grid[y, x:x + self.__length] = ' '

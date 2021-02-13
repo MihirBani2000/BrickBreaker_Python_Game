@@ -18,19 +18,13 @@ def action(ch):
     if ch == 'd':
         myPaddle.moveRight(myGrid.getGrid())
         if ball.isOnPaddle():
-            ball.moveWithPaddle(
-                myGrid.getGrid(),
-                myPaddle.getPosX() +
-                ini_x_ball)
+            ball.moveWithPaddle(myGrid.getGrid(), myPaddle.getPosX() + ini_x_ball)
 
     # move the paddle left
     elif ch == 'a':
         myPaddle.moveLeft(myGrid.getGrid())
         if ball.isOnPaddle():
-            ball.moveWithPaddle(
-                myGrid.getGrid(),
-                myPaddle.getPosX() +
-                ini_x_ball)
+            ball.moveWithPaddle(myGrid.getGrid(), myPaddle.getPosX() + ini_x_ball)
 
     # release the ball, if on paddle
     if ch == ' ':
@@ -57,7 +51,6 @@ if __name__ == '__main__':
 
     # main loop of the game
     while True:
-
         # to keep the cursor at the same place (0,0)
         print("\033[%d;%dH" % (0, 0))
 
