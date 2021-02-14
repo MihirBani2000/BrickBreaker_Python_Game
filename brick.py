@@ -9,7 +9,7 @@ class Brick():
         self.Xlen = 5
         self.Ylen = 1
 
-        self.isActive = True
+        self.__isActive = True
 
     def getPos(self):
         return self.x,self.y
@@ -20,7 +20,7 @@ class Brick():
     def eraseBrick(self, grid):
         x, y = self.x, self.y
         grid[y:y+self.Ylen, x:x + self.Xlen] = ' '
-        self.isActive = False
+        self.__isActive = False
         self.x = self.y = 0
 
     def makeBrick(self,bgcolor):
@@ -33,10 +33,8 @@ class Brick():
         self.x,self.y = x,y
         grid[y:y+self.Ylen, x:x + self.Xlen] = fig
 
-    def checkCollision(self,ball):
-        if self.isActive:
-            return 
-        return 0
+    def isActive(self):
+        return self.__isActive
 
 # color of the bricks defines the current strength of the brick
 # RED = 3
@@ -55,29 +53,29 @@ class RedBrick(Brick):
         self.__fig = super().makeBrick(self.__color)
         super().placeBrick(grid,x,y,self.__fig)
     
-    def ifCollide(self,grid,ball):
-        flag = super().checkCollision(ball)
+    def handleCollide(self,grid):
+        # flag,ballX = super().checkCollision(ball)
 
-        if flag:
+        # if flag:
 
-            if self.__maxStren - self.__currStren == 0:
-                # first time of collision
-                self.__currStren -= 1
-                self.__color = Back.CYAN
-                self.__fig = super().makeBrick(self.__color)
-                super().placeBrick(grid,self.x,self.y,self.__fig)
+        if self.__maxStren - self.__currStren == 0:
+            # first time of collision
+            self.__currStren -= 1
+            self.__color = Back.CYAN
+            self.__fig = super().makeBrick(self.__color)
+            super().placeBrick(grid,self.x,self.y,self.__fig)
 
-            elif self.__maxStren - self.__currStren == 1:
-                # second time collision
-                self.__currStren -= 1
-                self.__color = Back.GREEN
-                self.__fig = super().makeBrick(self.__color)
-                super().placeBrick(grid,self.x,self.y,self.__fig)
+        elif self.__maxStren - self.__currStren == 1:
+            # second time collision
+            self.__currStren -= 1
+            self.__color = Back.GREEN
+            self.__fig = super().makeBrick(self.__color)
+            super().placeBrick(grid,self.x,self.y,self.__fig)
 
-            elif self.__maxStren - self.__currStren == 2:
-                # third time collision
-                self.__currStren = 0
-                self.__color = Back.BLACK
-                self.eraseBrick(self, grid)
+        elif self.__maxStren - self.__currStren == 2:
+            # third time collision
+            self.__currStren = 0
+            self.__color = Back.BLACK
+            self.eraseBrick(grid)
             
     

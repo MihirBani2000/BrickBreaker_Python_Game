@@ -69,7 +69,7 @@ if __name__ == '__main__':
                 break
 
             action(ch)
-            ball.move(myGrid.getGrid(), myPaddle)
+            ball.move(myGrid.getGrid(), myPaddle,bricks)
 
             myBox.createBox(myGrid.getGrid())
             print('text')

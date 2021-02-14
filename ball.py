@@ -93,17 +93,62 @@ class Ball():
             # showmessage("Quit")
 
         self.__speedX, self.__speedY = speedX, speedY
-        self.__x, self.__y = x, y
+        # self.__x, self.__y = x, y
         return x,y
 
-    def placeBall(self, grid, x, y, paddle):
+    def checkCollisionBricks(self,grid,x, y, bricks):
+        speedX, speedY = self.__speedX, self.__speedY
+
+        for brick in bricks:
+            if brick.isActive():
+                # conditions for checking the collision of ball with brick
+                brick_flag = False
+                bX,bY = brick.getPos()
+                bX_len,bY_len = brick.getLength()
+
+
+                if (bX <= x <= bX + bX_len) and (bY <= y <= bY + bY_len):
+                    # ball going inside the brick
+                    if self.__x <= bX:
+                        # left side
+                        speedX = -speedX
+                        x = bX-1
+                        brick_flag = True
+
+                    elif self.__x >= bX + bX_len:
+                        # right side
+                        speedX = -speedX
+                        x = bX + bX_len + 1
+                        brick_flag = True
+
+                    elif self.__y <= bY:
+                        # top
+                        speedY = -speedY
+                        y = bY-1
+                        brick_flag = True
+
+                    elif self.__y >= bY:
+                        # bottom
+                        speedY = -speedY
+                        y = bY + bY_len + 1
+                        brick_flag = True
+
+                if brick_flag:
+                    brick.handleCollide(grid)
+
+        self.__speedX, self.__speedY = speedX, speedY
+        # self.__x, self.__y = x, y
+        return x,y
+
+    def placeBall(self, grid, x, y, paddle,bricks):
 
         temp_x,temp_y = self.checkCollisionWall(x, y)
-        x,y = self.checkCollisionPaddle(temp_x,temp_y,paddle)
+        temp_x,temp_y = self.checkCollisionPaddle(temp_x,temp_y,paddle)
+        self.__x,self.__y = self.checkCollisionBricks(grid,temp_x,temp_y,bricks)
 
         grid[self.__y, self.__x] = self.__fig
 
-    def move(self, grid, paddle):
+    def move(self, grid, paddle,bricks):
         if self.__onPaddle:
             # dont do anything if the ball is on the paddle
             return
@@ -112,7 +157,9 @@ class Ball():
         newX = self.__x + self.__speedX
         newY = self.__y + self.__speedY
         self.eraseBall(grid)
-        self.placeBall(grid, newX, newY, paddle)
+
+        # placing the ball at the required coordinates after checking collisions
+        self.placeBall(grid, newX, newY, paddle,bricks)
 
     def moveWithPaddle(self, grid, x):
         self.updateOld()
