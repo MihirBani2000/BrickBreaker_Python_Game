@@ -13,7 +13,7 @@ class Paddle():
         # step length while moving
         self.__stepX = 3
 
-        self.__length = 7
+        self.__length = 10
         self.__fig = np.full(
             (1, self.__length), MAGENTA + '=' + RESET, dtype='<U20')
         # self.__fig = MAGENTA + '=' + RESET
@@ -28,8 +28,11 @@ class Paddle():
     def getLength(self):
         return self.__length
 
+    def updateOld(self):
+        self.__oldx = self.__x
+
     def erasePaddle(self, grid):
-        x, y = self.__x, self.__y
+        x, y = self.__oldx, self.__y
         grid[y, x:x + self.__length] = ' '
 
     def placePaddle(self, grid, x):
@@ -40,14 +43,16 @@ class Paddle():
             x = BOX_WIDTH - self.__length
 
         self.__x = x
-        grid[self.__y, x:x + self.__length] = self.__fig
+        grid[self.__y, self.__x: self.__x + self.__length] = self.__fig
 
     def moveRight(self, grid):
         newX = self.__x + self.__stepX
+        self.updateOld()
         self.erasePaddle(grid)
         self.placePaddle(grid, newX)
 
     def moveLeft(self, grid):
         newX = self.__x - self.__stepX
+        self.updateOld()
         self.erasePaddle(grid)
         self.placePaddle(grid, newX)

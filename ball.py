@@ -43,26 +43,24 @@ class Ball():
     def release(self, paddle):
         pX, pL = paddle.getPosX(), paddle.getLength()
         self.__onPaddle = False
-        self.__speedY = -1
-        self.__speedX = -(pX + int(pL / 2) - self.__x)
+        self.__speedY = - 1
+        self.__speedX = - int((pX + int(pL / 2) - self.__x)/2)
+
 
     def checkCollisionWall(self, x, y):
         speedX, speedY = self.__speedX, self.__speedY
 
-        if x < LEFTWALL:
-            # left wall
+        if x < LEFTWALL:   # left wall
             x = LEFTWALL
             self.__x = x
             speedX = -speedX
 
-        elif x > BOX_WIDTH - 1:
-            # right wall
+        elif x > BOX_WIDTH - 1:   # right wall
             x = BOX_WIDTH - 1
             self.__x = x
             speedX = -speedX
 
-        if y < 1:
-            # top wall
+        if y < 1:     # top wall
             y = 1
             self.__y = y
             speedY = -speedY
@@ -77,17 +75,19 @@ class Ball():
         speedX, speedY = self.__speedX, self.__speedY
 
         if pX <= x <= pX + pL:
-            # within the paddle x coordinates
+            # within the x coordinates of paddle
             if y > HEIGHT - 3:
                 # Colliding with the paddle
                 # speedX changed according to the position of contact wrt to the mid of paddle
-                speedX -= (pX + int(pL / 2) - x)
+                speedX -= int((pX + int(pL / 2) - x)/2)
+
                 speedY = -speedY
                 y = HEIGHT - 3
                 self.__y = y
 
         elif y > HEIGHT - 3:
-            print("ball down")
+            pass
+            # print("ball down")
             # ball crossed the paddle
             # life lost
             # showmessage("Quit")
@@ -98,10 +98,10 @@ class Ball():
 
     def placeBall(self, grid, x, y, paddle):
 
-        x,y = self.checkCollisionWall(x, y)
-        x,y = self.checkCollisionPaddle(x,y,paddle)
+        temp_x,temp_y = self.checkCollisionWall(x, y)
+        x,y = self.checkCollisionPaddle(temp_x,temp_y,paddle)
 
-        grid[y, x] = self.__fig
+        grid[self.__y, self.__x] = self.__fig
 
     def move(self, grid, paddle):
         if self.__onPaddle:

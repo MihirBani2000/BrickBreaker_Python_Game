@@ -10,8 +10,8 @@ class Box:
 
     def __init__(self):
         self.__wallDepth = 2
-        self.__leftWall = BLUE + '|' + RESET
-        self.__rightWall = BLUE + '|' + RESET
+        self.__leftWall = BG_BLUE + BLUE + '|' + RESET
+        self.__rightWall = BG_BLUE + BLUE + '|' + RESET
         self.__topWall = BLUE + '_' + RESET
         self.__bottom = RED + '^' + RESET
 

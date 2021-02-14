@@ -33,7 +33,7 @@ def action(ch):
 
 
 if __name__ == '__main__':
-
+    os.system('clear')
     # Initialize the screen and background box for the game
     myGrid = Screen(HEIGHT, WIDTH)
     myBox = Box()
