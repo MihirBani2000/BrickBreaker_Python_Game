@@ -39,12 +39,18 @@ if __name__ == '__main__':
     myBox = Box()
     myBox.createBox(myGrid.getGrid())
 
-    # Initialize the paddle, ball, and bricks
+    # Initialize the paddle, ball
     random_x = random.randint(LEFTWALL, BOX_WIDTH)
     myPaddle = Paddle(random_x, HEIGHT - 2)
     myPaddle.placePaddle(myGrid.getGrid(), random_x)
     ini_x_ball = random.randint(0, myPaddle.getLength() - 1)
     ball = Ball(myPaddle.getPosX() + ini_x_ball, HEIGHT - 3, myGrid.getGrid())
+
+    # Initialize the bricks
+    bricks = []
+    for i in range(3,20):
+        brick = RedBrick(myGrid.getGrid(),i*5,15)
+        bricks.append(brick) 
 
     start_time = time.time()
     curr_time = time.time()
@@ -66,4 +72,5 @@ if __name__ == '__main__':
             ball.move(myGrid.getGrid(), myPaddle)
 
             myBox.createBox(myGrid.getGrid())
+            print('text')
             myGrid.printGrid()
