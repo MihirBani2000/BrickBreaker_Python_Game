@@ -1,22 +1,12 @@
 # design
 
-## class things  
-
-- position x,y
-
-### sub classes of things
-
-- bricks
-- ball
-- paddle
-
 ### class bricks
 
 - some health or strength of a brick
 - if health zero, delete the brick, or make it disappear
 - different types of bricks (subclasses),
- (different color, strength)
- (change the color as the health changes)
+  (different color, strength)
+  (change the color as the health changes)
   - indestructible
   - 3 hits
   - 2 hits
