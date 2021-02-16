@@ -24,7 +24,6 @@ class Player():
     
     def setTimer(self):
         self.__timer -= 1
-        return self.__timer
 
     def isGameOver(self):
         return self.__gameOver

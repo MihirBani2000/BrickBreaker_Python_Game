@@ -72,7 +72,6 @@ class Ball(Thing):
             speedY = -speedY
 
         self.__speedX, self.__speedY = speedX, speedY
-        # self.__x,self.__y = x,y
         return x, y
 
     def checkCollisionPaddle(self,grid, x, y, paddle):
