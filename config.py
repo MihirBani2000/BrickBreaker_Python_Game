@@ -6,7 +6,7 @@ init()
 
 # Game
 MAX_LIVES = 5
-GAME_TIME = 120
+GAME_TIME = 210 # seconds
 HIT_SCORE = 10  # 10 points on hitting any brick
 BREAK_SCORE = 20  # 20 points on breaking any brick
 LIFE_PENALTY = -30 # 30 points penalty in case of losing a life 

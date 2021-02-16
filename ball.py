@@ -1,45 +1,48 @@
-from numpy.lib.function_base import _select_dispatcher
 from config import *
-import random
+from thing import Thing
 
-class Ball():
+class Ball(Thing):
     ''' class for the Paddle'''
 
     def __init__(self, x, y, grid, firstBall=True):
-        self.__x = x
-        self.__y = y
+        super().__init__(x,y)
+        # self.__x = x
+        # self.__y = y
 
-        self.__oldx = 0
-        self.__oldy = 0
+        # self.__oldx = 0
+        # self.__oldy = 0
 
         # step length while moving
         self.__speedX = 0
         self.__speedY = 0
 
-        self.__fig = YELLOW + 'O' + RESET
+        self._fig = YELLOW + 'O' + RESET
+        
+        # to store whether the ball is out of screen or not
         self.__outOfScreen = False
+        
         # the ball in the beginning starts at top of the paddle
         if firstBall == True:
             self.__onPaddle = True
-            grid[y, x] = self.__fig
+            grid[y, x] = self._fig
         else:
             self.__onPaddle = False
 
-    def getPosX(self):
-        return self.__x
+    # def getPosX(self):
+    #     return self.__x
 
-    def getPosY(self):
-        return self.__y
+    # def getPosY(self):
+    #     return self.__y
 
     def isOutOfScreen(self):
         return self.__outOfScreen
     
-    def updateOld(self):
-        self.__oldx = self.__x
-        self.__oldy = self.__y
+    # def updateOld(self):
+    #     self.__oldx = self.__x
+    #     self.__oldy = self.__y
 
-    def eraseBall(self, grid):
-        grid[self.__oldy, self.__oldx] = ' '
+    # def erase(self, grid):
+    #     grid[self._oldy, self._oldx] = ' '
 
     def isOnPaddle(self):
         return self.__onPaddle
@@ -48,33 +51,24 @@ class Ball():
         pX, pL = paddle.getPosX(), paddle.getLength()
         self.__onPaddle = False
         self.__speedY = - 1
-        self.__speedX = - int((pX + int(pL / 2) - self.__x)/2)
-
-    # def respawn(self,grid,pX,pY,pL):
-    #     # self.eraseBall(grid)
-    #     # self.__onPaddle = True
-    #     # self.__x = random.randint(pX,pX+pL)
-    #     # self.__y = pY - 2
-    #     # self.__speedX = self.__speedY = 0
-    #     # self.updateOld()
-    #     self.__outOfScreen = True
+        self.__speedX = - int((pX + int(pL / 2) - self._x)/2)
 
     def checkCollisionWall(self, x, y):
         speedX, speedY = self.__speedX, self.__speedY
 
         if x < LEFTWALL:   # left wall
             x = LEFTWALL
-            self.__x = x
+            self._x = x
             speedX = -speedX
 
         elif x > BOX_WIDTH - 1:   # right wall
             x = BOX_WIDTH - 1
-            self.__x = x
+            self._x = x
             speedX = -speedX
 
         if y < 1:     # top wall
             y = 1
-            self.__y = y
+            self._y = y
             speedY = -speedY
 
         self.__speedX, self.__speedY = speedX, speedY
@@ -83,7 +77,6 @@ class Ball():
 
     def checkCollisionPaddle(self,grid, x, y, paddle):
         pX = paddle.getPosX()
-        pY = paddle.getPosY()
         pL = paddle.getLength()
         speedX, speedY = self.__speedX, self.__speedY
 
@@ -95,11 +88,10 @@ class Ball():
                 speedX -= int((pX + int(pL / 2) - x)/2)
                 speedY = -speedY
                 y = HEIGHT - 3
-                self.__y = y
+                self._y = y
 
         elif y > HEIGHT - 3:
             # ball crossed the paddle
-            # self.respawn(grid,pX,pY,pL)
             self.__outOfScreen = True
             speedX = speedY = 0
 
@@ -120,25 +112,25 @@ class Ball():
                 if (bX <= x <= bX + bX_len) and (bY <= y <= bY + bY_len):
                     # ball going inside the brick
                     
-                    if self.__y >= bY:
+                    if self._y >= bY:
                         # bottom
                         speedY = -speedY
                         y = bY + bY_len + 1
                         brick_flag = True
                     
-                    elif self.__y <= bY:
+                    elif self._y <= bY:
                         # top
                         speedY = -speedY
                         y = bY-1
                         brick_flag = True
                     
-                    elif self.__x <= bX:
+                    elif self._x <= bX:
                         # left side
                         speedX = -speedX
                         x = bX-1
                         brick_flag = True
 
-                    elif self.__x >= bX + bX_len:
+                    elif self._x >= bX + bX_len:
                         # right side
                         speedX = -speedX
                         x = bX + bX_len + 1
@@ -156,12 +148,13 @@ class Ball():
 
         temp_x,temp_y = self.checkCollisionWall(x, y)
         temp_x,temp_y  = self.checkCollisionBricks(grid,temp_x,temp_y,bricks,player)
-        self.__x,self.__y = self.checkCollisionPaddle(grid,temp_x,temp_y,paddle)
+        self._x,self._y = self.checkCollisionPaddle(grid,temp_x,temp_y,paddle)
 
         if not self.__outOfScreen:
-            grid[self.__y, self.__x] = self.__fig
+            grid[self._y, self._x] = self._fig
         else:
-            grid[self.__y, self.__x] = ' '
+            self.updateOld()
+            self.erase(grid)
 
 
     def move(self, grid, paddle,bricks,player):
@@ -170,15 +163,15 @@ class Ball():
             return
 
         self.updateOld()
-        newX = self.__x + self.__speedX
-        newY = self.__y + self.__speedY
-        self.eraseBall(grid)
+        newX = self._x + self.__speedX
+        newY = self._y + self.__speedY
+        self.erase(grid)
 
         # placing the ball at the required coordinates after checking collisions
         self.placeBall(grid, newX, newY, paddle,bricks,player)
 
     def moveWithPaddle(self, grid, x):
         self.updateOld()
-        self.eraseBall(grid)
-        self.__x = x
-        grid[self.__y, x] = self.__fig
+        self.erase(grid)
+        self._x = x
+        grid[self._y, x] = self._fig
