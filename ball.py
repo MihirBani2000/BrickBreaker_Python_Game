@@ -107,33 +107,32 @@ class Ball(Thing):
                 bX,bY = brick.getPos()
                 bX_len,bY_len = brick.getLength()
 
-
                 if (bX <= x <= bX + bX_len) and (bY <= y <= bY + bY_len):
                     # ball going inside the brick
-                    
-                    if self._y >= bY:
-                        # bottom
-                        speedY = -speedY
-                        y = bY + bY_len + 1
-                        brick_flag = True
-                    
-                    elif self._y <= bY:
-                        # top
-                        speedY = -speedY
-                        y = bY-1
-                        brick_flag = True
-                    
-                    elif self._x <= bX:
-                        # left side
-                        speedX = -speedX
-                        x = bX-1
-                        brick_flag = True
+                    if bX-1 <= self._x <= bX+bX_len+1 :
+                        if self._y >= bY:
+                            # bottom
+                            speedY = -speedY
+                            y = bY + bY_len + 1
+                            brick_flag = True
+                        
+                        elif self._y <= bY:
+                            # top
+                            speedY = -speedY
+                            y = bY-1
+                            brick_flag = True
+                    elif bY-1 <= self._y <= bY+bY_len+1:
+                        if self._x <= bX:
+                            # left side
+                            speedX = -speedX
+                            x = bX-1
+                            brick_flag = True
 
-                    elif self._x >= bX + bX_len:
-                        # right side
-                        speedX = -speedX
-                        x = bX + bX_len + 1
-                        brick_flag = True
+                        elif self._x >= bX + bX_len:
+                            # right side
+                            speedX = -speedX
+                            x = bX + bX_len + 1
+                            brick_flag = True
 
                 if brick_flag:
                     player.updateScores(HIT_SCORE)

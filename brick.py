@@ -8,10 +8,11 @@ class Brick(Thing):
         # self._x = x
         # self._y = y
 
-        self._lengthX = 5
-        self._lengthY = 2
+        self._lengthX = 7
+        self._lengthY = 3
         
         self._isActive = True
+        self._isGold = False
         
     def getPos(self):
         return self._x, self._y
@@ -25,8 +26,8 @@ class Brick(Thing):
         self._isActive = False
         self._x = self._y = 0
 
-    def makeBrick(self,bgcolor):
-        fig = np.full( (self._lengthY, self._lengthX), bgcolor + '#' + RESET , dtype='<U20')
+    def makeBrick(self,bgcolor,char = ':'):
+        fig = np.full( (self._lengthY, self._lengthX), bgcolor + char + RESET , dtype='<U20')
         fig[:,0] = bgcolor + '[' + RESET
         fig[:,-1] = bgcolor + ']' + RESET
         return fig
@@ -38,6 +39,8 @@ class Brick(Thing):
     def isActive(self):
         return self._isActive
 
+    def isGold(self):
+        return self._isGold
 # color of the bricks defines the current strength of the brick
 # GOLD = indestructible
 # RED = 3
@@ -136,13 +139,14 @@ class GoldBrick(Brick):
     '''
     def __init__(self, grid,x, y):
         super().__init__(x, y)
+        self._isGold = True
         self.__maxStren = 10
         self.__currStren = self.__maxStren
-        self.__color = Back.YELLOW
-        self._fig = super().makeBrick(self.__color)
+        self.__color = Back.YELLOW + Style.BRIGHT
+        self._fig = super().makeBrick(self.__color,char='#')
         super().placeBrick(grid,x,y,self._fig)
     
-    def handleCollide(self,grid):
+    def handleCollide(self,grid,player):
         # dont do anything if the powerup "Thru ball" is not activated
         return 
         # if self.__maxStren - self.__currStren == 0:
