@@ -1,58 +1,58 @@
 from config import *
+from thing import Thing
 
-
-class Paddle():
+class Paddle(Thing):
     ''' class for the Paddle'''
 
     def __init__(self, x, y):
-        self.__x = x
-        self.__y = y
-
-        self.__oldx = 0
+        super().__init__(x,y)
+        # self.__x = x
+        # self.__y = y
+        # self._oldx = 0
 
         # step length while moving
-        self.__stepX = 3
+        self._stepX = 3
 
-        self.__length = 10
-        self.__fig = np.full(
-            (1, self.__length), MAGENTA + '=' + RESET, dtype='<U20')
+        self._lengthX = 10
+        
+        self._fig = np.full(
+            (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
         # self.__fig = MAGENTA + '=' + RESET
-        # self.__lives = 3
 
-    def getPosX(self):
-        return self.__x
+    # def getPosX(self):
+    #     return self.__x
 
-    def getPosY(self):
-        return self.__y
+    # def getPosY(self):
+    #     return self.__y
 
     def getLength(self):
-        return self.__length
+        return self._lengthX
 
-    def updateOld(self):
-        self.__oldx = self.__x
+    # def updateOld(self):
+    #     self._oldx = self._x
 
-    def erasePaddle(self, grid):
-        x, y = self.__oldx, self.__y
-        grid[y, x:x + self.__length] = ' '
+    # def erase(self, grid):
+    #     x, y = self._oldx, self._oldy
+    #     grid[y, x:x + self._lengthX] = ' '
 
     def placePaddle(self, grid, x):
 
         if x < LEFTWALL:
             x = LEFTWALL
-        elif x > BOX_WIDTH - self.__length:
-            x = BOX_WIDTH - self.__length
+        elif x > BOX_WIDTH - self._lengthX:
+            x = BOX_WIDTH - self._lengthX
 
-        self.__x = x
-        grid[self.__y, self.__x: self.__x + self.__length] = self.__fig
+        self._x = x
+        grid[self._y, self._x: self._x + self._lengthX] = self._fig
 
     def moveRight(self, grid):
-        newX = self.__x + self.__stepX
+        newX = self._x + self._stepX
         self.updateOld()
-        self.erasePaddle(grid)
+        self.erase(grid)
         self.placePaddle(grid, newX)
 
     def moveLeft(self, grid):
-        newX = self.__x - self.__stepX
+        newX = self._x - self._stepX
         self.updateOld()
-        self.erasePaddle(grid)
+        self.erase(grid)
         self.placePaddle(grid, newX)

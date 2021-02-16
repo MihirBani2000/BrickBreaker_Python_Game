@@ -2,7 +2,6 @@ import os
 import time
 import signal
 import random
-import random
 
 from config import *
 from utils import *
