@@ -31,9 +31,9 @@ class Ball(Thing):
         return self.__onPaddle
 
     def setSpeed(self, val):
-        if abs(self.__speedX) <= MAX_SPEED_X:
+        if abs(self.__speedX * val) <= MAX_SPEED_X:
             self.__speedX = int(self.__speedX * val)            
-        if abs(self.__speedY) <= MAX_SPEED_Y:
+        if abs(self.__speedY * val) <= MAX_SPEED_Y:
             self.__speedY = int(self.__speedY * val)            
 
     def release(self, paddle):
@@ -68,12 +68,14 @@ class Ball(Thing):
         pL = paddle.getLength()
         speedX, speedY = self.__speedX, self.__speedY
 
-        if pX <= x <= pX + pL:
+        if (pX <= x < pX + pL) or (pX <= self._x < pX + pL):
             # within the x coordinates of paddle
             if y > HEIGHT - 3:
                 # Colliding with the paddle
                 # speedX changed according to the position of contact wrt to the mid of paddle
-                speedX -= int((pX + int(pL / 2) - x)/2)
+                delta_speedX = -int((pX + int(pL / 2) - self._x)/2)
+                if abs(self.__speedX + delta_speedX) <= MAX_SPEED_X:
+                    speedX += delta_speedX
                 speedY = -speedY
                 y = HEIGHT - 3
                 self._y = y
@@ -94,33 +96,50 @@ class Ball(Thing):
                 # conditions for checking the collision of ball with brick
                 brick_flag = False
                 bX,bY = brick.getPos()
-                bX_len,bY_len = brick.getLength()
+                bX_len, bY_len = brick.getLength()
+                
+                # slope_speed = int(abs(self.__speedY/self.__speedX))
 
-                if (bX <= x <= bX + bX_len) and (bY <= y <= bY + bY_len):
+                mean_x = self._x + (self.__speedX)/2
+                mean_y = self._y + (self.__speedY)/2
+                sec_mean_x = self._x + (self.__speedX)/4
+                sec_mean_y = self._y + (self.__speedY)/4
+                
+                inside_flag = (bX <= x < bX + bX_len) and (bY <= y < bY + bY_len)
+                mean_inside_flag = (bX <= mean_x < bX + bX_len) and (bY <= mean_y < bY + bY_len)
+                sec_mean_inside_flag = (bX <= sec_mean_x < bX + bX_len) and (bY <= sec_mean_y < bY + bY_len)
+
+                if inside_flag or mean_inside_flag or sec_mean_inside_flag:
                     # ball going inside the brick
-                    if bX-1 <= self._x <= bX+bX_len+1 :
-                        if self._y >= bY:
+
+                    if bY - 1 <= self._y <= bY + bY_len:
+                        if (self._x < bX) and (grid[bY,bX-1] == ' ' or grid[bY,bX-1] == self._fig):
+                            # left side
+                            speedX = -speedX
+                            x = bX-1
+                            y = int(mean_y)
+                            brick_flag = True
+
+                        elif (self._x >= bX + bX_len) and (grid[bY,bX+bX_len] == ' ' or grid[bY,bX+bX_len] == self._fig):
+                            # right side
+                            speedX = -speedX
+                            x = bX + bX_len
+                            y = int(mean_y)
+                            brick_flag = True
+
+                    if not brick_flag and (bX-1 <= self._x <= bX + bX_len + 1):
+                        if self._y >= bY+bY_len:
                             # bottom
                             speedY = -speedY
-                            y = bY + bY_len + 1
+                            y = bY + bY_len
+                            x = int(mean_x)
                             brick_flag = True
                         
                         elif self._y <= bY:
                             # top
                             speedY = -speedY
                             y = bY-1
-                            brick_flag = True
-                    elif bY-1 <= self._y <= bY+bY_len+1:
-                        if self._x <= bX:
-                            # left side
-                            speedX = -speedX
-                            x = bX-1
-                            brick_flag = True
-
-                        elif self._x >= bX + bX_len:
-                            # right side
-                            speedX = -speedX
-                            x = bX + bX_len + 1
+                            x = int(mean_x)
                             brick_flag = True
 
                 if brick_flag:
@@ -135,9 +154,9 @@ class Ball(Thing):
 
     def placeBall(self, grid, x, y, paddle,bricks,player,powerups):
 
-        temp_x,temp_y = self.checkCollisionWall(x, y)
-        temp_x,temp_y = self.checkCollisionBricks(grid,temp_x,temp_y,bricks,player,powerups)
-        self._x,self._y = self.checkCollisionPaddle(grid,temp_x,temp_y,paddle)
+        temp_x,temp_y = self.checkCollisionBricks(grid,x,y,bricks,player,powerups)
+        temp1_x,temp1_y = self.checkCollisionWall(temp_x,temp_y)
+        self._x,self._y = self.checkCollisionPaddle(grid,temp1_x,temp1_y,paddle)
 
         if not self.__outOfScreen:
             grid[self._y, self._x] = self._fig

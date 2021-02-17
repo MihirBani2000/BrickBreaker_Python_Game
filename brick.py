@@ -12,6 +12,7 @@ class Brick(Thing):
         
         self._isActive = True
         self._isGold = False
+        self._isExplode = False
         
     def getPos(self):
         return self._x, self._y
@@ -40,8 +41,12 @@ class Brick(Thing):
 
     def isGold(self):
         return self._isGold
+    
+    def isExplode(self):
+        return self._isExplode
 
 # color of the bricks defines the current strength of the brick
+# EXPLODING = explodes and also destroys nearby bricks
 # GOLD = indestructible
 # RED = 3
 # CYAN = 2
@@ -147,11 +152,35 @@ class GoldBrick(Brick):
         super().placeBrick(grid,x,y,self._fig)
     
     def handleCollide(self,grid,player,powerups):
-        # dont do anything if the powerup "Thru ball" is not activated
+        # dont do anything until the powerup "Thru ball" is not activated
         return 
         # if self.__maxStren - self.__currStren == 0:
         #     # first time of collision
         #     self.__currStren = 0
         #     self.__color = Back.BLACK
         #     self.erase(grid)
+
+class ExplodingBrick(Brick):
+    '''ExplodingBrick class
+    Exploding brick is the brick, with White color and explodes on collision
+    also explodes the nearby bricks
+    '''
+    def __init__(self, grid,x, y):
+        super().__init__(x, y)
+        self._isExplode = True
+        self.__maxStren = 1
+        self.__currStren = self.__maxStren
+        self.__color = Back.WHITE + Style.BRIGHT
+        self._fig = super().makeBrick(self.__color,char='*')
+        super().placeBrick(grid,x,y,self._fig)
+    
+    def handleCollide(self,grid,player,powerups):
+        
+        if self.__maxStren - self.__currStren == 0:
+            # first time of collision
+            self.__currStren = 0
+            self.__color = Back.BLACK
+            self.erase(grid)
+        return 
+
     

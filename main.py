@@ -40,7 +40,6 @@ def action(ch):
 
 
 if __name__ == '__main__':
-    os.system('clear')
 
     # Initialize the player
     myPlayer = Player()
@@ -57,27 +56,9 @@ if __name__ == '__main__':
     rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
     ball = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
 
-    # Initialize the bricks
+    # Initialize the bricks and layout
     bricks = []
-    obj_brick = Brick()
-    br_xlen,br_ylen = obj_brick.getLength()
-    for i in range(1,11):
-        if i in [3,8]:
-            rbrick = GoldBrick(myGrid.getGrid(), i * (br_xlen+6), 15)
-            grbrick = GoldBrick(myGrid.getGrid(), i * (br_xlen+4)+10, 15 - 4*(br_ylen))
-        else :
-            rbrick = RedBrick(myGrid.getGrid(), i * (br_xlen+6), 15)
-            grbrick = GreenBrick(myGrid.getGrid(), i * (br_xlen+4)+10, 15 - 4*(br_ylen))
-        
-        if i in [1,5,6,10]:
-            cbrick = GoldBrick(myGrid.getGrid(), i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
-        else:    
-            cbrick = CyanBrick(myGrid.getGrid(), i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
-
-        bricks.append(rbrick)
-        bricks.append(grbrick)
-        bricks.append(cbrick)
-    
+    makeLayout(bricks,myGrid.getGrid())
     
     # Initialize the powerups
     powerups = []
@@ -89,6 +70,7 @@ if __name__ == '__main__':
     curr_time = time.time()
     seconds_time = time.time()
 
+    os.system('clear')
     # main loop of the game
     while True:
         # to keep the cursor at the same place (0,0)
