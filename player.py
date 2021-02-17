@@ -43,9 +43,17 @@ class Player():
             self.GameOver(LIVES_OVER)
     
     def showStats(self):
-        print( Back.RED + Fore.WHITE + Style.BRIGHT +"B R I C K B R E A K E R".center(WIDTH) + RESET)
+        print(Back.RED + Fore.WHITE + Style.BRIGHT +"B R I C K B R E A K E R".center(WIDTH) + RESET)
         print(Back.WHITE + Fore.RED + Style.BRIGHT +''.center(WIDTH) + RESET)
         print(Back.RED + Fore.WHITE + Style.BRIGHT +"Lives Left: {}         Score: {}         Time left: {} ".format(self.getLives(),self.getScores(),self.getTimer()).center(WIDTH) + RESET )
+        print(Back.BLACK + Fore.WHITE + Style.BRIGHT 
+            + "\tExpand Paddle: "+ EXPAND_FIG
+            + "\tShrink Paddle: "+ SHRINK_FIG
+            + "\tGrab Paddle: "+ GRAB_FIG
+            + "\t\tFast Ball: "+ FAST_FIG
+            + "\tThru Ball: "+ THRU_FIG
+            + "\tMultiple Ball: "+ MULITPLE_FIG
+            + RESET )
         
 
     def showmessage(self,msg):
@@ -57,21 +65,21 @@ class Player():
         if msg == TIME_OVER:
             print(Fore.RED + 
                 "\t\t\t _______  ___   __   __  _______    __   __  _______\n" +
-                "\t\t\t|       ||   | |  |_|  ||       |  |  | |  ||       |\n" +
-                "\t\t\t|_     _||   | |       ||    ___|  |  | |  ||    _  |\n" +
-                "\t\t\t  |   |  |   | |       ||   |___   |  |_|  ||   |_| |\n" +
-                "\t\t\t  |   |  |   | |       ||    ___|  |       ||    ___|\n" +
-                "\t\t\t  |   |  |   | | ||_|| ||   |___   |       ||   |\n" +
+                "\t\t\t|       ||   | |  |_|  ||       |  |  | |  ||   __  |\n" +
+                "\t\t\t|_     _||   | |       ||    ___|  |  | |  ||  |  | |\n" +
+                "\t\t\t  |   |  |   | |       ||   |___   |  | |  ||  |__| |\n" +
+                "\t\t\t  |   |  |   | | ||_|| ||    ___|  |  |_|  ||    ___|\n" +
+                "\t\t\t  |   |  |   | | |   | ||   |___   |       ||   |\n" +
                 "\t\t\t  |___|  |___| |_|   |_||_______|  |_______||___|\n" + RESET)
 
         elif msg == VICTORY:
             print(Fore.GREEN + 
                 "\t\t\t __   __  ___   _______  _______  _______  ______    __   __\n" +
-                "\t\t\t|  | |  ||   | |       ||       ||       ||    _ |  |  | |  |\n" +
-                "\t\t\t|  |_|  ||   | |      _||_     _||   _   ||   | ||  |  |_|  |\n" +
-                "\t\t\t|       ||   | |     |    |   |  |  | |  ||   |_||_ |       |\n" +
-                "\t\t\t|       ||   | |     |    |   |  |  |_|  ||    __  ||_     _|\n" +
-                "\t\t\t |     | |   | |     |_   |   |  |       ||   |  | |  |   |\n" +
+                "\t\t\t|  | |  ||   | |     __||       ||       ||    _ |  |  | |  |\n" +
+                "\t\t\t|  |_|  ||   | |   |    |_     _||   _   ||   | ||  |  |_|  |\n" +
+                "\t\t\t|       ||   | |   |      |   |  |  | |  ||   |_||_ |       |\n" +
+                "\t\t\t|       ||   | |   |      |   |  |  |_|  ||    __  ||_     _|\n" +
+                "\t\t\t |     | |   | |   |___   |   |  |       ||   |  | |  |   |\n" +
                 "\t\t\t  |___|  |___| |_______|  |___|  |_______||___|  |_|  |___|\n" + RESET)
 
         elif msg == LIVES_OVER:

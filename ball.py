@@ -12,7 +12,7 @@ class Ball(Thing):
         self.__speedX = 0
         self.__speedY = 0
 
-        self._fig = YELLOW + 'O' + RESET
+        self._fig = BLUE + 'O' + RESET
         
         # to store whether the ball is out of screen or not
         self.__outOfScreen = False
@@ -30,8 +30,11 @@ class Ball(Thing):
     def isOnPaddle(self):
         return self.__onPaddle
 
-    def setSpeedY(self, val):
-        self.__speedY = int(self.__speedY * val)            
+    def setSpeed(self, val):
+        if abs(self.__speedX) <= MAX_SPEED_X:
+            self.__speedX = int(self.__speedX * val)            
+        if abs(self.__speedY) <= MAX_SPEED_Y:
+            self.__speedY = int(self.__speedY * val)            
 
     def release(self, paddle):
         pX, pL = paddle.getPosX(), paddle.getLength()

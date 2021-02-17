@@ -150,12 +150,12 @@ class FastBall(Powerup):
     
     def activate(self,grid,paddle,ball):
         if super().activate():
-            ball.setSpeedY(FAST_MULTIPLIER)
+            ball.setSpeed(FAST_MULTIPLIER)
             return True
         return False
 
     def deActivate(self,grid,paddle,ball):
         if super().deActivate():
-            ball.setSpeedY(1/FAST_MULTIPLIER)
+            ball.setSpeed(1/FAST_MULTIPLIER)
             return True
         return False

@@ -10,11 +10,10 @@ class Paddle(Thing):
         # step length while moving
         self._stepX = 3
 
-        self._lengthX = 10
+        self._lengthX = 11
         
         self._fig = np.full(
             (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
-        # self.__fig = MAGENTA + '=' + RESET
 
     def getLength(self):
         return self._lengthX

@@ -26,26 +26,28 @@ CYAN = Fore.CYAN
 # -------------------------------------------------------------------
 # Game
 MAX_LIVES = 5
-GAME_TIME = 210  # seconds
-POWER_TIME = 10  # 10 seconds for a powerup
-HIT_SCORE = 10  # 10 points on hitting any brick
-BREAK_SCORE = 20  # 20 points on breaking any brick
+GAME_TIME = 210     # seconds
+POWER_TIME = 20     # 20 seconds for a powerup
+HIT_SCORE = 10      # 10 points on hitting any brick
+BREAK_SCORE = 20    # 20 points on breaking any brick
 LIFE_PENALTY = -30  # 30 points penalty in case of losing a life
 
 # Powerups constants
-MIN_PADDLE_LENGTH = 5  # 5 units
+MIN_PADDLE_LENGTH = 7   # 5 units
 MAX_PADDLE_LENGTH = 15  # 15 units
-EXPAND = 2      # 2 units
-SHRINK = 2      # 2 units
-FAST_MULTIPLIER = 2
+MAX_SPEED_X = 4         # 4 units, max speed of ball in x dir
+MAX_SPEED_Y = 2         # 2 units, max speed of ball in y dir
+EXPAND = 2              # 2 units
+SHRINK = 2              # 2 units
+FAST_MULTIPLIER = 2     # 2 units
 
 # Powerups symbols
 EXPAND_FIG = Back.MAGENTA + WHITE + BOLD + 'L' + RESET
 SHRINK_FIG = Back.MAGENTA + WHITE + BOLD + 'S' + RESET
 GRAB_FIG = Back.MAGENTA + WHITE + BOLD + 'G' + RESET
-FAST_FIG = Back.YELLOW + CYAN + BOLD + 'F' + RESET
-THRU_FIG = Back.YELLOW + CYAN + BOLD + 'T' + RESET
-MULITPLE_FIG = Back.YELLOW + CYAN + BOLD + 'M' + RESET
+FAST_FIG = Back.BLUE + WHITE + BOLD + 'F' + RESET
+THRU_FIG = Back.BLUE + WHITE + BOLD + 'T' + RESET
+MULITPLE_FIG = Back.BLUE + WHITE + BOLD + 'M' + RESET
 
 # sizes
 HEIGHT = 30

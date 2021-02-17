@@ -24,15 +24,15 @@ def spawnPowerups(x,y,powerups):
         elif randChoice ==1:
             power = ExpandPaddle(x,y)
         elif randChoice ==2:
-            power = ShrinkPaddle(x,y)
+            power = FastBall(x,y)
         elif randChoice ==3:
-            power = ShrinkPaddle(x,y)
+            power = FastBall(x,y)
             # pass
         elif randChoice ==4:
-            power = ShrinkPaddle(x,y)
+            power = FastBall(x,y)
             # pass
         else:
-            power = ShrinkPaddle(x,y)
+            power = FastBall(x,y)
             # pass
     powerups.append(power)
 
