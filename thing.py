@@ -23,10 +23,11 @@ class Thing():
     def getLength(self):
         return self._lengthX, self._lengthY
 
-    def erase(self, grid):
-        x, y = self._oldx, self._oldy
-        grid[y:y+self._lengthY, x:x + self._lengthX] = ' '
-
     def updateOld(self):
         self._oldx = self._x
         self._oldy = self._y
+    
+    def erase(self, grid):
+        self.updateOld()
+        x, y = self._oldx, self._oldy
+        grid[y:y+self._lengthY, x:x + self._lengthX] = ' '

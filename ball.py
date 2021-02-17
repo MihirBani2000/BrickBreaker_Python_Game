@@ -1,3 +1,4 @@
+from utils import *
 from config import *
 from thing import Thing
 
@@ -6,12 +7,7 @@ class Ball(Thing):
 
     def __init__(self, x, y, grid, firstBall=True):
         super().__init__(x,y)
-        # self.__x = x
-        # self.__y = y
-
-        # self.__oldx = 0
-        # self.__oldy = 0
-
+        
         # step length while moving
         self.__speedX = 0
         self.__speedY = 0
@@ -28,24 +24,14 @@ class Ball(Thing):
         else:
             self.__onPaddle = False
 
-    # def getPosX(self):
-    #     return self.__x
-
-    # def getPosY(self):
-    #     return self.__y
-
     def isOutOfScreen(self):
         return self.__outOfScreen
     
-    # def updateOld(self):
-    #     self.__oldx = self.__x
-    #     self.__oldy = self.__y
-
-    # def erase(self, grid):
-    #     grid[self._oldy, self._oldx] = ' '
-
     def isOnPaddle(self):
         return self.__onPaddle
+
+    def setSpeedY(self, val):
+        self.__speedY = int(self.__speedY * val)            
 
     def release(self, paddle):
         pX, pL = paddle.getPosX(), paddle.getLength()
@@ -98,7 +84,7 @@ class Ball(Thing):
         # self.__x, self.__y = x, y
         return x,y
 
-    def checkCollisionBricks(self,grid, x, y, bricks,player):
+    def checkCollisionBricks(self,grid, x, y, bricks,player,powerups):
         speedX, speedY = self.__speedX, self.__speedY
         for brick in bricks:
             if brick.isActive():
@@ -136,40 +122,39 @@ class Ball(Thing):
 
                 if brick_flag:
                     player.updateScores(HIT_SCORE)
-                    brick.handleCollide(grid,player)
-
+                    break_flag = brick.handleCollide(grid,player,powerups)
+                    if break_flag:
+                        player.updateScores(BREAK_SCORE)
+                        spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups)
+                        
         self.__speedX, self.__speedY = speedX, speedY
-        # self.__x, self.__y = x, y
         return x,y
 
-    def placeBall(self, grid, x, y, paddle,bricks,player):
+    def placeBall(self, grid, x, y, paddle,bricks,player,powerups):
 
         temp_x,temp_y = self.checkCollisionWall(x, y)
-        temp_x,temp_y  = self.checkCollisionBricks(grid,temp_x,temp_y,bricks,player)
+        temp_x,temp_y = self.checkCollisionBricks(grid,temp_x,temp_y,bricks,player,powerups)
         self._x,self._y = self.checkCollisionPaddle(grid,temp_x,temp_y,paddle)
 
         if not self.__outOfScreen:
             grid[self._y, self._x] = self._fig
         else:
-            self.updateOld()
             self.erase(grid)
 
 
-    def move(self, grid, paddle,bricks,player):
+    def move(self, grid, paddle,bricks,player,powerups):
         if self.__onPaddle:
             # dont do anything if the ball is on the paddle
             return
 
-        self.updateOld()
         newX = self._x + self.__speedX
         newY = self._y + self.__speedY
         self.erase(grid)
 
         # placing the ball at the required coordinates after checking collisions
-        self.placeBall(grid, newX, newY, paddle,bricks,player)
+        self.placeBall(grid, newX, newY, paddle,bricks,player,powerups)
 
     def moveWithPaddle(self, grid, x):
-        self.updateOld()
         self.erase(grid)
         self._x = x
         grid[self._y, x] = self._fig

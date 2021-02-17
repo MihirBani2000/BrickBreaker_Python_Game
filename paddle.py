@@ -6,10 +6,7 @@ class Paddle(Thing):
 
     def __init__(self, x, y):
         super().__init__(x,y)
-        # self.__x = x
-        # self.__y = y
-        # self._oldx = 0
-
+    
         # step length while moving
         self._stepX = 3
 
@@ -19,21 +16,25 @@ class Paddle(Thing):
             (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
         # self.__fig = MAGENTA + '=' + RESET
 
-    # def getPosX(self):
-    #     return self.__x
-
-    # def getPosY(self):
-    #     return self.__y
-
     def getLength(self):
         return self._lengthX
 
-    # def updateOld(self):
-    #     self._oldx = self._x
+    def updateLength(self,grid,val):
+        self.erase(grid)
+        self._lengthX += val
+        self._fig = np.full(
+            (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
+        self.placePaddle(grid,self._x)
 
-    # def erase(self, grid):
-    #     x, y = self._oldx, self._oldy
-    #     grid[y, x:x + self._lengthX] = ' '
+    def expandLength(self,grid,val,ball):
+        self.updateLength(grid,val)
+
+    def shrinkLength(self,grid,val,ball):
+        bX = ball.getPosX()
+        rel_b_p_x = self._x + self._lengthX - bX
+        if rel_b_p_x <= val :
+            ball.moveWithPaddle(grid, bX - val)
+        self.updateLength(grid, -val)
 
     def placePaddle(self, grid, x):
 
@@ -47,12 +48,10 @@ class Paddle(Thing):
 
     def moveRight(self, grid):
         newX = self._x + self._stepX
-        self.updateOld()
         self.erase(grid)
         self.placePaddle(grid, newX)
 
     def moveLeft(self, grid):
         newX = self._x - self._stepX
-        self.updateOld()
         self.erase(grid)
         self.placePaddle(grid, newX)

@@ -12,6 +12,7 @@ from brick import *
 from ball import *
 from paddle import *
 from player import *
+from powerups import *
 
 
 def action(ch):
@@ -60,10 +61,6 @@ if __name__ == '__main__':
     bricks = []
     obj_brick = Brick()
     br_xlen,br_ylen = obj_brick.getLength()
-    # grbrick = GreenBrick(myGrid.getGrid(), 4 * (br_xlen+2) - 4, 15 - 4*(br_ylen+1))
-    # bricks.append(grbrick)
-    # gobrick = GoldBrick(myGrid.getGrid(), 9 * (br_xlen+2) - 4, 15 - 4*(br_ylen+1))
-    # bricks.append(gobrick)
     for i in range(1,11):
         if i in [3,8]:
             rbrick = GoldBrick(myGrid.getGrid(), i * (br_xlen+6), 15)
@@ -80,20 +77,13 @@ if __name__ == '__main__':
         bricks.append(rbrick)
         bricks.append(grbrick)
         bricks.append(cbrick)
-
-    # for i in range(1,11):
-    #     cbrick = CyanBrick(myGrid.getGrid(), i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
-    #     bricks.append(cbrick)
-
-    # for i in range(1,11):
-    #     grbrick = GreenBrick(myGrid.getGrid(), i * (br_xlen+4)+10, 15 - 4*(br_ylen))
-    #     bricks.append(grbrick)
-    # for i in range(1,11):
-    #     goldbrick = GoldBrick(myGrid.getGrid(), i * (br_xlen+2) - 4, 15 - 4*(br_ylen+1))
-    #     bricks.append(goldbrick)
-    #     pass
     
     
+    # Initialize the powerups
+    powerups = []
+    activatedPowerups = []
+    
+
     # storing the time values, used later
     start_time = time.time()
     curr_time = time.time()
@@ -109,21 +99,23 @@ if __name__ == '__main__':
             seconds_time = time.time()
             myPlayer.setTimer()
 
-        # run loop if condition
+        # run loop if the condition is true, sets the interval between each game frame
         if (time.time() - curr_time >= 0.15):
             curr_time = time.time()
 
-            # # updating the timer at every second
-            # if (0.9 < time.time() - seconds_time < 1.1):
-            #     seconds_time = time.time()
-            #     myPlayer.setTimer()
-
+            # game time limit
             if myPlayer.getTimer() <= 0:
                 myPlayer.GameOver(TIME_OVER)
 
-            ch = get_input()
             # action performed based on input from keyboard
+            ch = get_input()
             action(ch)
+
+            # check all the powerups, movement, activation and deactivation
+            movePowerups(powerups,activatedPowerups,myGrid.getGrid(), myPaddle,myPlayer,ball)
+            # check the active powerups and deactive/delete accordingly
+            deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,ball)
+
 
             # if the ball is out of the screen
             if ball.isOutOfScreen():
@@ -131,18 +123,24 @@ if __name__ == '__main__':
                 del ball
                 rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
                 ball = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
-                # also reduce the life of player
+                # reduce the life of player
                 myPlayer.reduceLife()
+                #  deactivate/delete every powerup, already activated or not
+                deleteAllPowerups(powerups,myGrid.getGrid())
+                deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,ball,all=True)
 
             # exit the loop if the game is over
             if myPlayer.isGameOver():
                 break
 
             # moving the ball to correct place
-            ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer)
+            ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups)
 
+            
             # delete the inactive bricks
             deleteBricks(bricks)
+            # print the rest bricks
+            printBricks(myGrid.getGrid(),bricks) 
 
             # if all the bricks are destroyed - VICTORY
             if not leftBricks(bricks):
