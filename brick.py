@@ -13,6 +13,7 @@ class Brick(Thing):
         self._isActive = True
         self._isGold = False
         self._isExplode = False
+        self._isVisited = False
         
     def getPos(self):
         return self._x, self._y
@@ -39,11 +40,20 @@ class Brick(Thing):
     def isActive(self):
         return self._isActive
 
+    def setActive(self,val):
+        self._isActive = val
+
     def isGold(self):
         return self._isGold
     
     def isExplode(self):
         return self._isExplode
+    
+    def isVisited(self):
+        return self._isVisited
+
+    def setVisited(self,val):
+        self._isVisited = val
 
 # color of the bricks defines the current strength of the brick
 # EXPLODING = explodes and also destroys nearby bricks
@@ -85,6 +95,7 @@ class RedBrick(Brick):
             self.__currStren = 0
             self.__color = Back.BLACK
             self.erase(grid)
+            self._isActive = False
             return True # returns true if brick broke
 
             
@@ -114,6 +125,7 @@ class CyanBrick(Brick):
             self.__currStren = 0
             self.__color = Back.BLACK
             self.erase(grid)
+            self._isActive = False
             return True # returns true if brick broke
 
 class GreenBrick(Brick):
@@ -135,6 +147,7 @@ class GreenBrick(Brick):
             self.__currStren = 0
             self.__color = Back.BLACK
             self.erase(grid)
+            self._isActive = False
             return True # returns true if brick broke
     
 
@@ -174,13 +187,47 @@ class ExplodingBrick(Brick):
         self._fig = super().makeBrick(self.__color,char='*')
         super().placeBrick(grid,x,y,self._fig)
     
-    def handleCollide(self,grid,player,powerups):
+    def checkBoundary(self,brick1,brick2):
+        '''if self and brick are in contact, return True, otherwise False'''
+        return False
+
+    def checkNeighbours(self,grid,bricks):
+        '''checks all the nearby bricks of an exploding brick'''
+        explodingBricks = []
+        explodingBricks.append(self)
+        self.setVisited(True)
+        for brick in bricks:
+            '''check the nearby bricks to the current brick
+                if not visited, and exploding, push it to list, recursive call on the list
+                if not visited, and normal, set the visited
+                if visited, ignore
+            '''
+            if brick.isVisited():
+                continue
+            elif brick.isExploding():
+                pass
+            else:
+                pass
+        return
+
+    def destroyNeighbours(self,grid,bricks):
+        if bricks:
+            for brick in bricks:
+                if brick.isVisited() and brick.isActive():
+                    brick.erase(grid)
+                    brick.setActive(False)
+        return
+
+    def handleCollide(self,grid,player,powerups,bricks):
         
         if self.__maxStren - self.__currStren == 0:
             # first time of collision
             self.__currStren = 0
             self.__color = Back.BLACK
             self.erase(grid)
-        return 
+            self.checkNeighbours(grid,bricks)
+            self.destroyNeighbours(grid,bricks)
+            return True
+        return False
 
     
