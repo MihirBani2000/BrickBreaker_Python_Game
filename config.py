@@ -32,6 +32,11 @@ HIT_SCORE = 10      # 10 points on hitting any brick
 BREAK_SCORE = 20    # 20 points on breaking any brick
 LIFE_PENALTY = -30  # 30 points penalty in case of losing a life
 
+# Brick Types
+# GOLD = "gold"
+# EXPLODE = "exploding"
+# NORMAL = "normal"
+
 # Powerups constants
 MIN_PADDLE_LENGTH = 7   # 5 units
 MAX_PADDLE_LENGTH = 15  # 15 units

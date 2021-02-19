@@ -144,7 +144,7 @@ class Ball(Thing):
 
                 if brick_flag:
                     player.updateScores(HIT_SCORE)
-                    if brick.isExplode():
+                    if brick.isExploding():
                         break_flag = brick.handleCollide(grid,player,powerups,bricks)
                     else:
                         break_flag = brick.handleCollide(grid,player,powerups)

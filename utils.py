@@ -41,6 +41,14 @@ def makeLayout(bricks,grid):
             break
         elif option == '2':
             '''LAYOUT 2'''
+            for i in range(6,13):
+                # if i in [5,13]:
+                brick = ExplodingBrick(grid, i * (br_xlen)+7, 13+br_ylen)
+                # elif i in [3,8,10,15]:
+                #     brick = GoldBrick(grid, i * (br_xlen)+7, 13)
+                # else:
+                #     brick = RedBrick(grid, i * (br_xlen)+7, 13)
+                bricks.append(brick)
             for i in range(1,18):
                 if i in [5,13]:
                     brick = GreenBrick(grid, i * (br_xlen)+7, 13)

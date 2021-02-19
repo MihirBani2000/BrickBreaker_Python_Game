@@ -46,7 +46,7 @@ class Brick(Thing):
     def isGold(self):
         return self._isGold
     
-    def isExplode(self):
+    def isExploding(self):
         return self._isExplode
     
     def isVisited(self):
@@ -54,6 +54,66 @@ class Brick(Thing):
 
     def setVisited(self,val):
         self._isVisited = val
+
+    def explode(self,grid,player):
+         # exploding the brick, irrespective of type
+        self.__currStren = 0
+        self.__color = Back.BLACK
+        self.erase(grid)
+        self._isActive = False
+        self._isVisited = False
+        player.updateScores(BREAK_SCORE)
+        # returns true if brick explodes
+        return True 
+
+    def getAdjacentNeighbours(self,grid,bricks):
+        # get the adjacent neigbours of the current brick
+        neighbours = []
+        bx, by = self.getPos()
+        bx_len,by_len = self.getLength()
+
+        for brick in bricks:
+            bx1, by1 = brick.getPos()
+            bx1_len,by1_len = brick.getLength()
+
+            if (bx==bx1) and (by==by1):
+            # dont check with the same brick
+                continue
+            
+            # all the conditions now
+            if (by == by1 + by1_len) or (by1 == by + by_len):
+            # the other brick is just above/below the self brick
+                if (bx <= bx1 <= bx+bx_len) or (bx <= bx1 + bx1_len <= bx + bx_len): 
+                    # if the brick is in contact with self, from top/bottom
+                    neighbours.append(brick)
+            
+            elif (bx == bx1 + bx1_len) or (bx1 == bx + bx_len):
+            # the other brick is just left/right of the self brick
+                if (by <= by1 <= by+by_len) or (by <= by1 + by1_len <= by + by_len): 
+                    # if the brick is in contact with self, from sides
+                    neighbours.append(brick)
+        return neighbours
+
+    def getAllNeighbours(self,grid,bricks):
+        '''marks all the neighbours of all the exploding bricks in a cluster'''
+        if self.isVisited():
+            # if visited already return the function
+            return
+
+        self.setVisited(True)
+
+        if not self.isExploding():
+            # dont go further if its not an exploding brick
+            return
+
+        # get the neighbour of current brick if its exploding
+        neighbours = self.getAdjacentNeighbours(grid,bricks)
+        if neighbours:
+            for brick in neighbours:
+                brick.getAllNeighbours(grid,bricks)
+
+
+
 
 # color of the bricks defines the current strength of the brick
 # EXPLODING = explodes and also destroys nearby bricks
@@ -96,6 +156,7 @@ class RedBrick(Brick):
             self.__color = Back.BLACK
             self.erase(grid)
             self._isActive = False
+            # player.updateScores(BREAK_SCORE)
             return True # returns true if brick broke
 
             
@@ -126,6 +187,7 @@ class CyanBrick(Brick):
             self.__color = Back.BLACK
             self.erase(grid)
             self._isActive = False
+            # player.updateScores(BREAK_SCORE)
             return True # returns true if brick broke
 
 class GreenBrick(Brick):
@@ -148,6 +210,7 @@ class GreenBrick(Brick):
             self.__color = Back.BLACK
             self.erase(grid)
             self._isActive = False
+            # player.updateScores(BREAK_SCORE)
             return True # returns true if brick broke
     
 
@@ -187,36 +250,79 @@ class ExplodingBrick(Brick):
         self._fig = super().makeBrick(self.__color,char='*')
         super().placeBrick(grid,x,y,self._fig)
     
-    def checkBoundary(self,brick1,brick2):
-        '''if self and brick are in contact, return True, otherwise False'''
-        return False
 
-    def checkNeighbours(self,grid,bricks):
-        '''checks all the nearby bricks of an exploding brick'''
-        explodingBricks = []
-        explodingBricks.append(self)
-        self.setVisited(True)
-        for brick in bricks:
-            '''check the nearby bricks to the current brick
-                if not visited, and exploding, push it to list, recursive call on the list
-                if not visited, and normal, set the visited
-                if visited, ignore
-            '''
-            if brick.isVisited():
-                continue
-            elif brick.isExploding():
-                pass
-            else:
-                pass
-        return
+    # def checkNeighbours(self,grid,bricks):
+    #     '''checks all the nearby bricks of an exploding brick'''
+    #     explodingBricks = []
+    #     explodingBricks.append(self)
+    #     self.setVisited(True)
+    #     for brick in bricks:
+    #         '''check the nearby bricks to the current brick
+    #             if not visited, and exploding, push it to list, recursive call on the list
+    #             if not visited, and normal, set the visited
+    #             if visited, ignore
+    #         '''
+    #         if brick.isVisited():
+    #             continue
+    #         elif brick.isExploding():
+    #             pass
+    #         else:
+    #             pass
+    #     return
 
-    def destroyNeighbours(self,grid,bricks):
+    def destroyNeighbours(self,grid,bricks,player):
         if bricks:
             for brick in bricks:
                 if brick.isVisited() and brick.isActive():
-                    brick.erase(grid)
-                    brick.setActive(False)
+                    brick.explode(grid,player)
         return
+
+    # def getAdjacentNeighbours(self,grid,bricks):
+    #     # get the adjacent neigbours of the current brick
+    #     neighbours = []
+    #     bx, by = self.getPos()
+    #     bx_len,by_len = self.getLength()
+
+    #     for brick in bricks:
+    #         bx1, by1 = brick.getPos()
+    #         bx1_len,by1_len = brick.getLength()
+
+    #         if (bx==bx1) and (by==by1):
+    #         # dont check with the same brick
+    #             continue
+            
+    #         # all the conditions now
+    #         if (by == by1 + by1_len) or (by1 == by + by_len):
+    #         # the other brick is just above/below the self brick
+    #             if (bx <= bx1 <= bx+bx_len) or (bx <= bx1 + bx1_len <= bx + bx_len): 
+    #                 # if the brick is in contact with self, from top/bottom
+    #                 neighbours.append(brick)
+            
+    #         elif (bx == bx1 + bx1_len) or (bx1 == bx + bx_len):
+    #         # the other brick is just left/right of the self brick
+    #             if (by <= by1 <= by+by_len) or (by <= by1 + by1_len <= by + by_len): 
+    #                 # if the brick is in contact with self, from sides
+    #                 neighbours.append(brick)
+    #     return neighbours
+
+    # def getAllNeighbours(self,grid,bricks):
+    #     '''marks all the neighbours of all the exploding bricks in a cluster'''
+    #     if self.isVisited():
+    #         # if visited already return the function
+    #         return
+
+    #     self.setVisited(True)
+
+    #     if not self.isExploding():
+    #         # dont go further if its not an exploding brick
+    #         return
+
+    #     # get the neighbour of current brick if its exploding
+    #     neighbours = self.getAdjacentNeighbours(grid,bricks)
+    #     if neighbours:
+    #         for brick in neighbours:
+    #             brick.getAllNeighbours(grid,bricks)
+
 
     def handleCollide(self,grid,player,powerups,bricks):
         
@@ -224,9 +330,8 @@ class ExplodingBrick(Brick):
             # first time of collision
             self.__currStren = 0
             self.__color = Back.BLACK
-            self.erase(grid)
-            self.checkNeighbours(grid,bricks)
-            self.destroyNeighbours(grid,bricks)
+            self.getAllNeighbours(grid,bricks)
+            self.destroyNeighbours(grid,bricks,player)
             return True
         return False
 
