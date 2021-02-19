@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     # Initialize the bricks and layout
     bricks = []
-    makeLayout(bricks,myGrid.getGrid())
+    chooseLayout(bricks,myGrid.getGrid())
     
     # Initialize the powerups
     powerups = []
