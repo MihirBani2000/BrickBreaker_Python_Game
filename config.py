@@ -13,7 +13,6 @@ UNDERLINED = "\033[4m"
 RESET = Style.RESET_ALL
 GREY = Fore.LIGHTBLACK_EX
 BG_GREY = Back.LIGHTBLACK_EX
-# CYAN = Fore.LIGHTCYAN_EX + Back.CYAN
 RED = Fore.RED
 YELLOW = Fore.YELLOW
 BLUE = Fore.BLUE
@@ -33,9 +32,11 @@ BREAK_SCORE = 20    # 20 points on breaking any brick
 LIFE_PENALTY = -30  # 30 points penalty in case of losing a life
 
 # Brick Types
-# GOLD = "gold"
-# EXPLODE = "exploding"
-# NORMAL = "normal"
+# GOLD_BR = "G"
+# EXPLODING_BR = "E"
+# RED_BR = "R"
+# GREEN_BR = "G"
+# CYAN_BR = "C"
 
 # Powerups constants
 MIN_PADDLE_LENGTH = 7   # 5 units
