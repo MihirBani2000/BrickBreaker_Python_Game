@@ -105,5 +105,7 @@ class Player():
         print("\n")
         print("\t\t\t\t\tHope you had a nice time!!!")
         print("\n")
+        if self.getScores()>1000:
+            print("\n\t\t\t\t\tBRICK BEAKER BOND!!!\n")
         print("\t\t\t\t\tScore: {}".format(self.getScores()))
         print("\n\n")

@@ -144,7 +144,10 @@ class Ball(Thing):
 
                 if brick_flag:
                     player.updateScores(HIT_SCORE)
-                    break_flag = brick.handleCollide(grid,player,powerups)
+                    if brick.isExploding():
+                        break_flag = brick.handleCollide(grid,player,powerups,bricks)
+                    else:
+                        break_flag = brick.handleCollide(grid,player,powerups)
                     if break_flag:
                         player.updateScores(BREAK_SCORE)
                         spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups)

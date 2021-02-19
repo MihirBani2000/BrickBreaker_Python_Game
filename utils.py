@@ -41,6 +41,14 @@ def makeLayout(bricks,grid):
             break
         elif option == '2':
             '''LAYOUT 2'''
+            for i in range(6,13):
+                # if i in [5,13]:
+                brick = ExplodingBrick(grid, i * (br_xlen)+7, 13+br_ylen)
+                # elif i in [3,8,10,15]:
+                #     brick = GoldBrick(grid, i * (br_xlen)+7, 13)
+                # else:
+                #     brick = RedBrick(grid, i * (br_xlen)+7, 13)
+                bricks.append(brick)
             for i in range(1,18):
                 if i in [5,13]:
                     brick = GreenBrick(grid, i * (br_xlen)+7, 13)
@@ -51,21 +59,21 @@ def makeLayout(bricks,grid):
                 bricks.append(brick)
             for i in range(1,16):
                 if i in [8]:
-                    brick = RedBrick(grid, i * (br_xlen)+13, 13 - 2*br_ylen)
+                    brick = RedBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
                 elif i in [3,13]:
-                    brick = GreenBrick(grid, i * (br_xlen)+13, 13 - 2*br_ylen)
+                    brick = GreenBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
                 elif i in [1,6,10,15]:
-                    brick = GoldBrick(grid, i * (br_xlen)+13, 13 - 2*br_ylen)
+                    brick = GoldBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
                 else:
-                    brick = CyanBrick(grid, i * (br_xlen)+13, 13 - 2*br_ylen)
+                    brick = CyanBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
                 bricks.append(brick)
             for i in range(1,14):
                 if i in [1,5,9,13]:
-                    brick = RedBrick(grid, i * (br_xlen)+20, 1)
+                    brick = RedBrick(grid, i * (br_xlen)+20, br_ylen)
                 elif i in [3,7,11]:
-                    brick = CyanBrick(grid, i * (br_xlen)+20, 1)
+                    brick = CyanBrick(grid, i * (br_xlen)+20, br_ylen)
                 else :
-                    brick = GreenBrick(grid, i * (br_xlen)+20, 1)
+                    brick = GreenBrick(grid, i * (br_xlen)+20, br_ylen)
                 bricks.append(brick)
             break
         if option == '3':
@@ -146,28 +154,29 @@ def movePowerups(powerups,activatedPowerups,grid,paddle,player,ball):
 
 
 # BRICK related
-def initializeBricks():
-    pass
 
 def deleteBricks(bricks):
     '''to delete the bricks which are not active anymore'''
-    delBricks = []
-    for brick in bricks:
-        if not brick.isActive():
-            delBricks.append(brick)
-    
-    for brick in delBricks:
-        bricks.remove(brick)
-        del brick
+    if bricks:
+        delBricks = []
+        for brick in bricks:
+            if not brick.isActive():
+                delBricks.append(brick)
+        
+        for brick in delBricks:
+            bricks.remove(brick)
+            del brick
     
 def leftBricks(bricks):
-    for brick in bricks:
-        if not brick.isGold():
-            return 1 
+    if bricks:
+        for brick in bricks:
+            if not brick.isGold():
+                return 1 
     return 0
 
 def printBricks(grid,bricks):
-    for brick in bricks:
-        bX,bY = brick.getPos()
-        fig = brick.getFig()
-        brick.placeBrick(grid,bX,bY,fig)
+    if bricks:
+        for brick in bricks:
+            bX,bY = brick.getPos()
+            fig = brick.getFig()
+            brick.placeBrick(grid,bX,bY,fig)
