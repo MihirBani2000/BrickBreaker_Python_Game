@@ -14,7 +14,6 @@ from paddle import *
 from player import *
 from powerups import *
 
-
 def action(ch):
     """takes action according to the keyboard input"""
     # quit the game
@@ -24,20 +23,15 @@ def action(ch):
     # move the paddle right
     if ch == 'd':
         myPaddle.moveRight(myGrid.getGrid())
-        if ball.isOnPaddle():
-            ball.moveWithPaddle(myGrid.getGrid(), myPaddle.getPosX() + rand_x_ball)
 
     # move the paddle left
     elif ch == 'a':
         myPaddle.moveLeft(myGrid.getGrid())
-        if ball.isOnPaddle():
-            ball.moveWithPaddle(myGrid.getGrid(), myPaddle.getPosX() + rand_x_ball)
 
     # release the ball, if on paddle
     if ch == ' ':
         if ball.isOnPaddle():
             ball.release(myPaddle)
-
 
 if __name__ == '__main__':
 
@@ -55,7 +49,8 @@ if __name__ == '__main__':
     myPaddle.placePaddle(myGrid.getGrid(), random_x)
     rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
     ball = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
-
+    ball.setPaddleOffset(rand_x_ball)
+    
     # Initialize the bricks and layout
     bricks = []
     chooseLayout(bricks,myGrid.getGrid())
@@ -64,7 +59,6 @@ if __name__ == '__main__':
     powerups = []
     activatedPowerups = []
     
-
     # storing the time values, used later
     start_time = time.time()
     curr_time = time.time()
@@ -105,6 +99,7 @@ if __name__ == '__main__':
                 del ball
                 rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
                 ball = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
+                ball.setPaddleOffset(rand_x_ball)
                 # reduce the life of player
                 myPlayer.reduceLife()
                 #  deactivate/delete every powerup, already activated or not

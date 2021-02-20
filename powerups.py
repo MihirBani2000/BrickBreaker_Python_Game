@@ -36,7 +36,6 @@ class Powerup(Thing):
     def getTime(self):
         return self._time
 
-
     def checkCollisionPaddle(self,grid, x, y, paddle=None,ball=None):
         pX = paddle.getPosX()
         pL = paddle.getLength()
@@ -51,7 +50,6 @@ class Powerup(Thing):
                 self.erase(grid)
                 self._onScreen = False
                 
-
         elif y > HEIGHT - 3:
             # powerup missed the paddle
             self._y = HEIGHT - 3
@@ -82,11 +80,10 @@ class Powerup(Thing):
         # shrink paddle
         # paddle grab
 class ExpandPaddle(Powerup):
-
+    '''expands the paddle by 2 units'''
     def __init__(self, x, y):
         super().__init__(x, y)
         self._fig = EXPAND_FIG
-        # self._onScreen = True
 
     def activate(self,grid,paddle,ball):
         if paddle.getLength() + EXPAND <= MAX_PADDLE_LENGTH :
@@ -94,14 +91,15 @@ class ExpandPaddle(Powerup):
                 paddle.expandLength(grid,EXPAND,ball)
             return True
         return False
+        
     def deActivate(self,grid,paddle,ball):
         if super().deActivate():
             paddle.shrinkLength(grid,EXPAND,ball)
             return True
         return False
             
-
 class ShrinkPaddle(Powerup):
+    '''shrinks the paddle by 2 units'''
 
     def __init__(self, x, y):
         super().__init__(x, y)
@@ -120,30 +118,32 @@ class ShrinkPaddle(Powerup):
             return True
         return False
 
-# class GrabPaddle(Powerup):
-#     # self._ballx
-#     # self.
-#     def __init__(self, x, y):
-#         super().__init__(x, y)
-#         self._fig = GRAB_FIG
-        
-#     def activate(self,grid,paddle,ball):
-#         # if paddle.getLength() - SHRINK >= MIN_PADDLE_LENGTH :
-#         if super().activate():
-#             pass
-#             # paddle.shrinkLength(grid,SHRINK,ball)
+class GrabPaddle(Powerup):
+    '''grabs the ball onto the paddle'''
 
-#     def deActivate(self,grid,paddle,ball):
-#         if super().deActivate():
-#             pass
-#             # paddle.expandLength(grid,SHRINK,ball)
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self._fig = GRAB_FIG
+        
+    def activate(self,grid,paddle,ball):
+        if super().activate():
+            ball.setSticky(True)
+            return True
+        return False
+
+    def deActivate(self,grid,paddle,ball):
+        if super().deActivate():
+            ball.setSticky(False)
+            return True
+        return False
 
 # Ball powerups
         # thru ball
         # fast ball
         # ball multiplier
-class FastBall(Powerup):
 
+class FastBall(Powerup):
+    '''Increases the ball speed upto a limit'''
     def __init__(self, x, y):
         super().__init__(x, y)
         self._fig = FAST_FIG
@@ -157,5 +157,23 @@ class FastBall(Powerup):
     def deActivate(self,grid,paddle,ball):
         if super().deActivate():
             ball.setSpeed(1/FAST_MULTIPLIER)
+            return True
+        return False
+
+class ThruBall(Powerup):
+    '''Increases the ball speed upto a limit'''
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self._fig = THRU_FIG
+    
+    def activate(self,grid,paddle,ball):
+        if super().activate():
+            ball.setThru(True)
+            return True
+        return False
+
+    def deActivate(self,grid,paddle,ball):
+        if super().deActivate():
+            ball.setThru(False)
             return True
         return False

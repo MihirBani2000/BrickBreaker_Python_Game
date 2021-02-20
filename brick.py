@@ -62,7 +62,7 @@ class Brick(Thing):
         self.erase(grid)
         self._isActive = False
         self._isVisited = False
-        player.updateScores(BREAK_SCORE)
+        player.updateScores(EXPLODE_SCORE)
         # returns true if brick explodes
         return True 
 

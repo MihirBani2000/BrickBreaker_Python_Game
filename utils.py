@@ -146,11 +146,13 @@ def chooseLayout(bricks,grid):
 # POWERUPS related
 def spawnPowerups(x,y,powerups):
     '''spawns a powerup with chance = probability, and stores in a list'''
-    probability = 0.4
+    probability = 0.3
+    # probability = 1
 
     # taking 20% chance of spawing a new powerup
     if random.random() <= probability:
         randChoice = random.randint(0,5)
+        # randChoice = 4
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y)
@@ -159,11 +161,11 @@ def spawnPowerups(x,y,powerups):
         elif randChoice ==2:
             power = FastBall(x,y)
         elif randChoice ==3:
-            power = ExpandPaddle(x,y)
+            power = GrabPaddle(x,y)
         elif randChoice ==4:
-            power = ShrinkPaddle(x,y)
+            power = ThruBall(x,y)
         else:
-            power = ExpandPaddle(x,y)
+            power = GrabPaddle(x,y)
         powerups.append(power)
 
 def deleteActivePowerups(powerups,grid,paddle,ball,all=False):

@@ -16,7 +16,14 @@ class Ball(Thing):
         
         # to store whether the ball is out of screen or not
         self.__outOfScreen = False
-        
+
+        # for the powerup of grabbing ball to paddle
+        self.__isSticky = False     
+        self.__paddleOffset = 0   
+
+        # for thru ball powerup
+        self.__isThru = False     
+
         # the ball in the beginning starts at top of the paddle
         if firstBall == True:
             self.__onPaddle = True
@@ -24,17 +31,42 @@ class Ball(Thing):
         else:
             self.__onPaddle = False
 
+
     def isOutOfScreen(self):
         return self.__outOfScreen
     
     def isOnPaddle(self):
         return self.__onPaddle
 
+    def setOnPaddle(self,val):
+        self.__onPaddle = val
+
+    def isSticky(self):
+        return self.__isSticky
+    
+    def setSticky(self,val):
+        self.__isSticky = val
+
+    def isThru(self):
+        return self.__isThru
+    
+    def setThru(self,val):
+        self.__isThru = val
+
+    def setPaddleOffset(self,val):
+        self.__paddleOffset = val
+
     def setSpeed(self, val):
         if abs(self.__speedX * val) <= MAX_SPEED_X:
             self.__speedX = int(self.__speedX * val)            
         if abs(self.__speedY * val) <= MAX_SPEED_Y:
             self.__speedY = int(self.__speedY * val)            
+
+    # def setSpeed(self, xval,yval):
+    #     if abs(self.__speedX + xval) <= MAX_SPEED_X:
+    #         self.__speedX +=  xval            
+    #     if abs(self.__speedY + yval) <= MAX_SPEED_Y:
+    #         self.__speedY += val
 
     def release(self, paddle):
         pX, pL = paddle.getPosX(), paddle.getLength()
@@ -72,13 +104,21 @@ class Ball(Thing):
             # within the x coordinates of paddle
             if y > HEIGHT - 3:
                 # Colliding with the paddle
-                # speedX changed according to the position of contact wrt to the mid of paddle
-                delta_speedX = -int((pX + int(pL / 2) - self._x)/2)
-                if abs(self.__speedX + delta_speedX) <= MAX_SPEED_X:
-                    speedX += delta_speedX
-                speedY = -speedY
+                # if the ball is not sticky, then only change the velocity, otherwise make it zero.
+                if self.isSticky():
+                    speedY = 0
+                    speedX = 0
+                    self.setOnPaddle(True)
+                    x = int((self._x + x)/2)
+                    self.setPaddleOffset(x - pX)
+                else:
+                    # speedX changed according to the position of contact wrt to the mid of paddle
+                    delta_speedX = -int( (pX + int(pL / 2) - self._x)/2)
+                    if abs(self.__speedX + delta_speedX) <= MAX_SPEED_X:
+                        speedX += delta_speedX               
+                    speedY = -speedY
+                    
                 y = HEIGHT - 3
-                self._y = y
 
         elif y > HEIGHT - 3:
             # ball crossed the paddle
@@ -86,11 +126,14 @@ class Ball(Thing):
             speedX = speedY = 0
 
         self.__speedX, self.__speedY = speedX, speedY
-        # self.__x, self.__y = x, y
         return x,y
 
     def checkCollisionBricks(self,grid, x, y, bricks,player,powerups):
         speedX, speedY = self.__speedX, self.__speedY
+
+        # storing a copy of x,y for thru ball
+        tempx, tempy = x,y
+
         for brick in bricks:
             if brick.isActive():
                 # conditions for checking the collision of ball with brick
@@ -143,16 +186,30 @@ class Ball(Thing):
                             brick_flag = True
 
                 if brick_flag:
-                    player.updateScores(HIT_SCORE)
-                    if brick.isExploding():
-                        break_flag = brick.handleCollide(grid,player,powerups,bricks)
+                    # on collision
+                    if self.isThru():
+                        # if thru ball
+                        if brick.isExploding():
+                            break_flag = brick.handleCollide(grid,player,powerups,bricks)
+                        else:
+                            break_flag = brick.explode(grid,player)
+
                     else:
-                        break_flag = brick.handleCollide(grid,player,powerups)
+                        if brick.isExploding():
+                            break_flag = brick.handleCollide(grid,player,powerups,bricks)
+                        else:
+                            player.updateScores(HIT_SCORE)
+                            break_flag = brick.handleCollide(grid,player,powerups)
+                            if break_flag:
+                                player.updateScores(BREAK_SCORE)
+
                     if break_flag:
-                        player.updateScores(BREAK_SCORE)
                         spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups)
-                        
-        self.__speedX, self.__speedY = speedX, speedY
+
+        if self.isThru():
+            x,y = tempx,tempy
+        else:
+            self.__speedX, self.__speedY = speedX, speedY
         return x,y
 
     def placeBall(self, grid, x, y, paddle,bricks,player,powerups):
@@ -166,10 +223,17 @@ class Ball(Thing):
         else:
             self.erase(grid)
 
+    def moveWithPaddle(self, grid, x):
+        self.erase(grid)
+        self._x = x
+        grid[self._y, x] = self._fig
 
     def move(self, grid, paddle,bricks,player,powerups):
+
         if self.__onPaddle:
-            # dont do anything if the ball is on the paddle
+            # if the brick is on the paddle, grabbed, or in startup
+            newx = paddle.getPosX() + self.__paddleOffset
+            self.moveWithPaddle(grid,newx)
             return
 
         newX = self._x + self.__speedX
@@ -179,7 +243,3 @@ class Ball(Thing):
         # placing the ball at the required coordinates after checking collisions
         self.placeBall(grid, newX, newY, paddle,bricks,player,powerups)
 
-    def moveWithPaddle(self, grid, x):
-        self.erase(grid)
-        self._x = x
-        grid[self._y, x] = self._fig

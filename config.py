@@ -29,6 +29,7 @@ GAME_TIME = 210     # seconds
 POWER_TIME = 15     # 15 seconds for a powerup
 HIT_SCORE = 10      # 10 points on hitting any brick
 BREAK_SCORE = 20    # 20 points on breaking any brick
+EXPLODE_SCORE = HIT_SCORE + BREAK_SCORE    # points on exploding/thru any brick
 LIFE_PENALTY = -30  # 30 points penalty in case of losing a life
 
 # Brick Types
