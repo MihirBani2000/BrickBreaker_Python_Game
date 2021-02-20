@@ -25,14 +25,14 @@ class Paddle(Thing):
             (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
         self.placePaddle(grid,self._x)
 
-    def expandLength(self,grid,val,ball):
-        self.updateLength(grid,val)
 
-    def shrinkLength(self,grid,val,ball):
-        bX = ball.getPosX()
-        rel_b_p_x = self._x + self._lengthX - bX
-        if rel_b_p_x <= val :
-            ball.moveWithPaddle(grid, bX - val)
+    def shrinkLength(self,grid,val,balls):
+        for ball in balls:
+            if ball.isOnPaddle():
+                bX = ball.getPosX()
+                rel_b_p_x = self._x + self._lengthX - bX
+                if rel_b_p_x <= val:
+                    ball.moveWithPaddle(grid, bX - val)
         self.updateLength(grid, -val)
 
     def placePaddle(self, grid, x):

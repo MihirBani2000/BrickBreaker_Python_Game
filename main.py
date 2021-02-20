@@ -19,19 +19,17 @@ def action(ch):
     # quit the game
     if ch == 'q':
         myPlayer.GameOver(QUIT)
-    
     # move the paddle right
     if ch == 'd':
         myPaddle.moveRight(myGrid.getGrid())
-
     # move the paddle left
     elif ch == 'a':
         myPaddle.moveLeft(myGrid.getGrid())
-
     # release the ball, if on paddle
     if ch == ' ':
-        if ball.isOnPaddle():
-            ball.release(myPaddle)
+        for ball in balls:
+            if ball.isOnPaddle():
+                ball.release(myPaddle)
 
 if __name__ == '__main__':
 
@@ -44,12 +42,19 @@ if __name__ == '__main__':
     myBox.createBox(myGrid.getGrid())
 
     # Initialize the paddle, ball
+    balls = []
     random_x = random.randint(LEFTWALL, BOX_WIDTH)
     myPaddle = Paddle(random_x, HEIGHT - 2)
     myPaddle.placePaddle(myGrid.getGrid(), random_x)
     rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
-    ball = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
-    ball.setPaddleOffset(rand_x_ball)
+    ball_1 = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
+    ball_1.setPaddleOffset(rand_x_ball)
+    balls.append(ball_1)
+    
+    # ball_2 = Ball(myPaddle.getPosX() + 8, HEIGHT - 3, myGrid.getGrid())
+    # ball_2.setPaddleOffset(8)
+    # balls.append(ball_2)
+    
     
     # Initialize the bricks and layout
     bricks = []
@@ -88,30 +93,34 @@ if __name__ == '__main__':
             action(ch)
 
             # check all the powerups, movement, activation and deactivation
-            movePowerups(powerups,activatedPowerups,myGrid.getGrid(), myPaddle,myPlayer,ball)
+            movePowerups(powerups,activatedPowerups,myGrid.getGrid(), myPaddle,myPlayer,balls)
             # check the active powerups and deactive/delete accordingly
-            deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,ball)
+            deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,balls)
 
 
-            # if the ball is out of the screen
-            if ball.isOutOfScreen():
-                # delete the ball and re initialize the ball
-                del ball
+            # if the last/only ball is out of the screen
+            delBalls(balls)
+            if not balls:
                 rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
-                ball = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
-                ball.setPaddleOffset(rand_x_ball)
+                ball_2 = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
+                ball_2.setPaddleOffset(rand_x_ball)
+                balls.append(ball_2)
+
                 # reduce the life of player
                 myPlayer.reduceLife()
+
                 #  deactivate/delete every powerup, already activated or not
                 deleteAllPowerups(powerups,myGrid.getGrid())
-                deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,ball,all=True)
+                deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,balls,all=True)
+
 
             # exit the loop if the game is over
             if myPlayer.isGameOver():
                 break
 
-            # moving the ball to correct place
-            ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups)
+            for ball in balls:
+                # moving the ball to correct place
+                ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups)
 
             
             # delete the inactive bricks

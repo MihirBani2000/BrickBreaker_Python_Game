@@ -56,17 +56,15 @@ class Ball(Thing):
     def setPaddleOffset(self,val):
         self.__paddleOffset = val
 
-    def setSpeed(self, val):
-        if abs(self.__speedX * val) <= MAX_SPEED_X:
-            self.__speedX = int(self.__speedX * val)            
-        if abs(self.__speedY * val) <= MAX_SPEED_Y:
-            self.__speedY = int(self.__speedY * val)            
-
-    # def setSpeed(self, xval,yval):
-    #     if abs(self.__speedX + xval) <= MAX_SPEED_X:
-    #         self.__speedX +=  xval            
-    #     if abs(self.__speedY + yval) <= MAX_SPEED_Y:
-    #         self.__speedY += val
+    def setSpeed(self, val,val2=None, multiply=True):
+        if multiply:
+            if abs(self.__speedX * val) <= MAX_SPEED_X:
+                self.__speedX = int(self.__speedX * val)            
+            if abs(self.__speedY * val) <= MAX_SPEED_Y:
+                self.__speedY = int(self.__speedY * val)            
+        else:
+            self.__speedX = val
+            self.__speedY = val2            
 
     def release(self, paddle):
         pX, pL = paddle.getPosX(), paddle.getLength()
@@ -243,3 +241,10 @@ class Ball(Thing):
         # placing the ball at the required coordinates after checking collisions
         self.placeBall(grid, newX, newY, paddle,bricks,player,powerups)
 
+    def split(self,grid):
+        newball = Ball(self._x,self._y,grid,False)
+        self.__speedX = int(self.__speedX/2)
+        if self.__speedX == 0:
+            self.__speedX = 1
+        newball.setSpeed(-self.__speedX,self.__speedY,False)
+        return newball
