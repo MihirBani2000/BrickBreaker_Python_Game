@@ -56,7 +56,7 @@ class Brick(Thing):
         self._isVisited = val
 
     def explode(self,grid,player):
-         # exploding the brick, irrespective of type
+        # exploding the brick, irrespective of type
         self.__currStren = 0
         self.__color = Back.BLACK
         self.erase(grid)
@@ -111,8 +111,6 @@ class Brick(Thing):
         if neighbours:
             for brick in neighbours:
                 brick.getAllNeighbours(grid,bricks)
-
-
 
 
 # color of the bricks defines the current strength of the brick
@@ -225,13 +223,8 @@ class GoldBrick(Brick):
         super().placeBrick(grid,x,y,self._fig)
     
     def handleCollide(self,grid,player,powerups):
-        # dont do anything until the powerup "Thru ball" is not activated
+        # dont do anything
         return 
-        # if self.__maxStren - self.__currStren == 0:
-        #     # first time of collision
-        #     self.__currStren = 0
-        #     self.__color = Back.BLACK
-        #     self.erase(grid)
 
 class ExplodingBrick(Brick):
     '''ExplodingBrick class

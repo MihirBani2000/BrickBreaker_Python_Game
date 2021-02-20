@@ -72,7 +72,7 @@ class Powerup(Thing):
         isMultiple = isinstance(self,MultipleBall)
 
         if self._onScreen:
-            # print("debug")
+
             newY = self._y + self._speedY
             self.erase(grid)
 
@@ -156,8 +156,8 @@ class GrabPaddle(Powerup):
         return False
 
 # Ball powerups
-        # thru ball
         # fast ball
+        # thru ball
         # ball multiplier
 
 class FastBall(Powerup):
@@ -210,13 +210,19 @@ class MultipleBall(Powerup):
         if super().activate():
             newballs = []
             for ball in balls:
-                newball = ball.split(grid)
+                newball = ball.split(grid,paddle)
                 newballs.append(newball)
             return newballs
         return False
 
     def deActivate(self,grid,paddle,balls):
         if super().deActivate():
-            # do nothing
+            # if balls have more than one ball, remove the extra balls
+            half_len = int(len(balls)/2)
+            if half_len >= 1:
+                while len(balls) > half_len:
+                    delball = balls.pop()
+                    delball.erase(grid)
+                    del delball
             return True
         return False

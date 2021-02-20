@@ -41,20 +41,20 @@ if __name__ == '__main__':
     myBox = Box()
     myBox.createBox(myGrid.getGrid())
 
-    # Initialize the paddle, ball
-    balls = []
+    # Initialize the paddle
     random_x = random.randint(LEFTWALL, BOX_WIDTH)
     myPaddle = Paddle(random_x, HEIGHT - 2)
     myPaddle.placePaddle(myGrid.getGrid(), random_x)
+    
+    # Initialize the ball
+    balls = []
     rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
     ball_1 = Ball(myPaddle.getPosX() + rand_x_ball, HEIGHT - 3, myGrid.getGrid())
     ball_1.setPaddleOffset(rand_x_ball)
     balls.append(ball_1)
-    
     # ball_2 = Ball(myPaddle.getPosX() + 8, HEIGHT - 3, myGrid.getGrid())
     # ball_2.setPaddleOffset(8)
     # balls.append(ball_2)
-    
     
     # Initialize the bricks and layout
     bricks = []

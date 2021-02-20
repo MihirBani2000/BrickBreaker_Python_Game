@@ -25,7 +25,6 @@ class Paddle(Thing):
             (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
         self.placePaddle(grid,self._x)
 
-
     def shrinkLength(self,grid,val,balls):
         for ball in balls:
             if ball.isOnPaddle():

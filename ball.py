@@ -5,10 +5,9 @@ from thing import Thing
 class Ball(Thing):
     ''' class for the Paddle'''
 
-    def __init__(self, x, y, grid, firstBall=True):
+    def __init__(self, x, y, grid, onPaddle=True):
         super().__init__(x,y)
         
-        # step length while moving
         self.__speedX = 0
         self.__speedY = 0
 
@@ -25,11 +24,9 @@ class Ball(Thing):
         self.__isThru = False     
 
         # the ball in the beginning starts at top of the paddle
-        if firstBall == True:
-            self.__onPaddle = True
-            grid[y, x] = self._fig
-        else:
-            self.__onPaddle = False
+        self.__onPaddle = onPaddle
+        # if onPaddle == True:
+        grid[y, x] = self._fig
 
 
     def isOutOfScreen(self):
@@ -139,8 +136,6 @@ class Ball(Thing):
                 bX,bY = brick.getPos()
                 bX_len, bY_len = brick.getLength()
                 
-                # slope_speed = int(abs(self.__speedY/self.__speedX))
-
                 mean_x = self._x + (self.__speedX)/2
                 mean_y = self._y + (self.__speedY)/2
                 sec_mean_x = self._x + (self.__speedX)/4
@@ -241,10 +236,20 @@ class Ball(Thing):
         # placing the ball at the required coordinates after checking collisions
         self.placeBall(grid, newX, newY, paddle,bricks,player,powerups)
 
-    def split(self,grid):
-        newball = Ball(self._x,self._y,grid,False)
-        self.__speedX = int(self.__speedX/2)
-        if self.__speedX == 0:
-            self.__speedX = 1
-        newball.setSpeed(-self.__speedX,self.__speedY,False)
+    def split(self,grid,paddle):
+        onPaddle = self.isOnPaddle()
+        if not onPaddle:
+            newball = Ball(self._x,self._y,grid,onPaddle)
+            self.__speedX = int(self.__speedX/2)
+            if self.__speedX == 0:
+                self.__speedX = 1
+            newball.setSpeed(-self.__speedX,self.__speedY,False)
+        else:
+            pX = paddle.getPosX()
+            pL = paddle.getLength() 
+            bX = self._x
+            x = bX+1
+            if bX == pX + pL - 1:
+                x = bX-1
+            newball = Ball(x, self._y, grid, onPaddle)
         return newball

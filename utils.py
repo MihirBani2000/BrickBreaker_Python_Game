@@ -11,11 +11,10 @@ def reposition_cursor(x=0,y=0):
 
 
 def printLayout(bricks,grid,layout,xoffset=0,yoffset=1,custom=None):
-    
+    '''prints the initial brick layout, based on input Layout list'''
     obj_brick = Brick()
     br_xlen,br_ylen = obj_brick.getLength()
     
-
     rows = [ lay.split() for lay in layout ]
     for (rind,row) in enumerate(rows):
         
@@ -145,10 +144,9 @@ def spawnPowerups(x,y,powerups):
     probability = 0.4
     # probability = 1
 
-    # taking 20% chance of spawing a new powerup
+    # taking 40% chance of spawing a new powerup
     if random.random() <= probability:
         randChoice = random.randint(0,5)
-        # randChoice = 5
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y)
@@ -231,6 +229,7 @@ def deleteBricks(bricks):
                 del brick
     
 def leftBricks(bricks):
+    '''to find the bricks that are left in the game other than Gold type'''
     if bricks:
         for brick in bricks:
             if not brick.isGold():
@@ -238,6 +237,7 @@ def leftBricks(bricks):
     return 0
 
 def printBricks(grid,bricks):
+    '''to print all the bricks'''
     if bricks:
         for brick in bricks:
             bX,bY = brick.getPos()

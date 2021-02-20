@@ -1,17 +1,18 @@
 from config import *
 
+
 class Thing():
 
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         self._x = x
         self._y = y
 
         self._oldx = 0
         self._oldy = 0
-        
+
         self._lengthX = 1
         self._lengthY = 1
-        
+
         self._fig = None
 
     def getPosX(self):
@@ -26,8 +27,8 @@ class Thing():
     def updateOld(self):
         self._oldx = self._x
         self._oldy = self._y
-    
+
     def erase(self, grid):
         self.updateOld()
         x, y = self._oldx, self._oldy
-        grid[y:y+self._lengthY, x:x + self._lengthX] = ' '
+        grid[y:y + self._lengthY, x:x + self._lengthX] = ' '
