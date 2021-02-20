@@ -20,7 +20,7 @@ def printLayout(bricks,grid,layout,xoffset=0,yoffset=1,custom=None):
     for (rind,row) in enumerate(rows):
         
         for (cind,char) in enumerate(row):
-            print("rind",rind, " cind",cind)
+            # print("rind",rind, " cind",cind)
             brick = None
             if char == 'G': #green
                 brick = GreenBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
@@ -77,8 +77,6 @@ def chooseLayout(bricks,grid):
             #     bricks.append(cbrick)
             break
 
-
-
         elif option == '2':
             '''LAYOUT 2'''
 
@@ -89,8 +87,6 @@ def chooseLayout(bricks,grid):
                         "- - R R Y R G R R Y R Y R R G R Y R R -",
                     ]
             printLayout(bricks,grid,layout,0,0)
-
-
             # for i in range(6,13):
             #     # if i in [5,13]:
             #     brick = ExplodingBrick(grid, i * (br_xlen)+7, 13+br_ylen)
@@ -146,13 +142,13 @@ def chooseLayout(bricks,grid):
 # POWERUPS related
 def spawnPowerups(x,y,powerups):
     '''spawns a powerup with chance = probability, and stores in a list'''
-    probability = 0.3
+    probability = 0.4
     # probability = 1
 
     # taking 20% chance of spawing a new powerup
     if random.random() <= probability:
         randChoice = random.randint(0,5)
-        # randChoice = 4
+        # randChoice = 5
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y)
@@ -165,15 +161,15 @@ def spawnPowerups(x,y,powerups):
         elif randChoice ==4:
             power = ThruBall(x,y)
         else:
-            power = GrabPaddle(x,y)
+            power = MultipleBall(x,y)
         powerups.append(power)
 
-def deleteActivePowerups(powerups,grid,paddle,ball,all=False):
+def deleteActivePowerups(powerups,grid,paddle,balls,all=False):
     '''to delete and deactivate the powerups'''
     if not all and powerups:
         for power in powerups:
             if round(time.time()) - power.getTime() >= POWER_TIME:
-                power.deActivate(grid,paddle,ball)
+                power.deActivate(grid,paddle,balls)
                 powerups.remove(power)
                 del power
                 return
@@ -181,7 +177,7 @@ def deleteActivePowerups(powerups,grid,paddle,ball,all=False):
     if all and powerups:
         delPowers = []
         for power in powerups:
-            power.deActivate(grid,paddle,ball)
+            power.deActivate(grid,paddle,balls)
             delPowers.append(power)
         for power in delPowers:
             powerups.remove(power)
@@ -202,11 +198,16 @@ def deleteAllPowerups(powerups,grid):
         delPowers.clear()
         return    
 
-def movePowerups(powerups,activatedPowerups,grid,paddle,player,ball):
+def movePowerups(powerups,activatedPowerups,grid,paddle,player,balls):
     if powerups:
         delPower = []
         for power in powerups:
-            if power.move(grid,paddle,player,ball):
+            move_flag = power.move(grid,paddle,player,balls)
+            if move_flag:
+                if isinstance(power,MultipleBall):
+                    # if the powerup was multipleBall, then append the new balls 
+                    # to main list, mutlipleBall returns a list
+                    balls.extend(move_flag) 
                 activatedPowerups.append(power)
                 delPower.append(power)
         if delPower:
@@ -224,10 +225,10 @@ def deleteBricks(bricks):
         for brick in bricks:
             if not brick.isActive():
                 delBricks.append(brick)
-        
-        for brick in delBricks:
-            bricks.remove(brick)
-            del brick
+        if delBricks:
+            for brick in delBricks:
+                bricks.remove(brick)
+                del brick
     
 def leftBricks(bricks):
     if bricks:
@@ -242,3 +243,16 @@ def printBricks(grid,bricks):
             bX,bY = brick.getPos()
             fig = brick.getFig()
             brick.placeBrick(grid,bX,bY,fig)
+
+# BALLS related
+def delBalls(balls):
+    '''to delete the balls which are not active anymore'''
+    if balls:
+        delBall = []
+        for ball in balls:
+            if ball.isOutOfScreen():
+                delBall.append(ball)
+        if delBall:
+            for ball in delBall:
+                balls.remove(ball)
+                del ball
