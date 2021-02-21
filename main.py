@@ -132,6 +132,10 @@ if __name__ == '__main__':
             if not leftBricks(bricks):
                 myPlayer.GameOver(VICTORY)
 
+            # exit the loop if the game is over
+            if myPlayer.isGameOver():
+                break
+            
             # print the stats and the top header of the game session
             myPlayer.showStats()
             myBox.createBox(myGrid.getGrid())
