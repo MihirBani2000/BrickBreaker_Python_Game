@@ -22,10 +22,11 @@ class Brick(Thing):
     def getFig(self):
         return self._fig
 
-    def erase(self, grid):
+    def erase(self, grid,deactivate=True):
         x, y = self._x, self._y
         grid[y:y+self._lengthY, x:x + self._lengthX] = ' '
-        self._isActive = False
+        if deactivate:
+            self._isActive = False
 
     def makeBrick(self,bgcolor,char = ':'):
         fig = np.full( (self._lengthY, self._lengthX), bgcolor + char + RESET , dtype='<U20')
@@ -34,6 +35,7 @@ class Brick(Thing):
         return fig
         
     def placeBrick(self, grid, x,y, fig):
+        self.erase(grid,False)
         if self._isActive:
             self._x,self._y = x,y
             grid[y:y+self._lengthY, x:x + self._lengthX] = fig

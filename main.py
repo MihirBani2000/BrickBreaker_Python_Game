@@ -35,8 +35,11 @@ def action(ch,level):
                 ball.release(myPaddle)
     
     # skip to the next level
-    if ch == 'x' and level<LEVELS:
-        return True
+    if ch == 'x':
+        if level<LEVELS:
+            return True
+        elif level==LEVELS:
+            myPlayer.GameOver(QUIT)
     return False
 
 
@@ -76,6 +79,9 @@ if __name__ == '__main__':
         # Initialize the powerups
         powerups = []
         activatedPowerups = []
+
+        # flag for activation of falling bricks
+        falling_flag = 0
         
         # storing the time values, used later
         start_time = time.time()
@@ -102,6 +108,11 @@ if __name__ == '__main__':
                 if myPlayer.getTimer() <= 0:
                     myPlayer.GameOver(TIME_OVER)
 
+                # falling bricks time check, and flag
+                fall_diff = time.time() - start_time
+                if FALLING_BRICK_TIME <= fall_diff:
+                    falling_flag = 1
+                
                 # action performed based on input from keyboard
                 ch = get_input()
                 if action(ch,level):    
@@ -136,7 +147,7 @@ if __name__ == '__main__':
 
                 for ball in balls:
                     # moving the ball to correct place
-                    ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups)
+                    ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups,falling_flag)
 
                 # if bullets:
                     # for bullet in bullets:
@@ -146,8 +157,15 @@ if __name__ == '__main__':
                 
                 # delete the inactive bricks
                 deleteBricks(bricks)
+
                 # print the rest bricks
-                printBricks(myGrid.getGrid(),bricks) 
+                printBricks(myGrid.getGrid(),bricks,myPlayer,myPaddle) 
+                # step = 0
+                # fall_diff = time.time() - fallingBrick_time
+                # if FALLING_BRICK_TIME-0.1 <= fall_diff <=FALLING_BRICK_TIME+0.1:
+                #     step = 1
+                #     fallingBrick_time = time.time()
+                # printBricks(myGrid.getGrid(),bricks,myPlayer,myPaddle,step) 
 
                 # if all the bricks are destroyed - VICTORY
                 if not leftBricks(bricks):

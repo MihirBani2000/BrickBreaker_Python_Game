@@ -89,7 +89,7 @@ class Ball(Thing):
     #     self._speedX, self._speedY = speedX, speedY
     #     return x, y
 
-    def checkCollisionPaddle(self,grid, x, y, paddle):
+    def checkCollisionPaddle(self,grid, x, y, paddle,bricks,player,falling_flag=False):
         pX = paddle.getPosX()
         pL = paddle.getLength()
         speedX, speedY = self._speedX, self._speedY
@@ -112,6 +112,11 @@ class Ball(Thing):
                         speedX += delta_speedX               
                     speedY = -speedY
                     
+                # Falling bricks if the ball hits the paddle, after a fixed time
+                if falling_flag:
+                    step = 1
+                    printBricks(grid,bricks,player,paddle,step) 
+
                 y = HEIGHT - 3
 
         elif y > HEIGHT - 3:
@@ -204,11 +209,11 @@ class Ball(Thing):
             self._speedX, self._speedY = speedX, speedY
         return x,y
 
-    def placeBall(self, grid, x, y, paddle,bricks,player,powerups):
+    def placeBall(self, grid, x, y, paddle,bricks,player,powerups,falling_flag=False):
 
         temp_x,temp_y = self.checkCollisionBricks(grid,x,y,bricks,player,powerups)
         temp1_x,temp1_y = self.checkCollisionWall(temp_x,temp_y)
-        self._x,self._y = self.checkCollisionPaddle(grid,temp1_x,temp1_y,paddle)
+        self._x,self._y = self.checkCollisionPaddle(grid,temp1_x,temp1_y,paddle,bricks,player,falling_flag)
 
         if not self.__outOfScreen:
             grid[self._y, self._x] = self._fig
@@ -220,7 +225,7 @@ class Ball(Thing):
         self._x = x
         grid[self._y, x] = self._fig
 
-    def move(self, grid, paddle,bricks,player,powerups):
+    def move(self, grid, paddle,bricks,player,powerups,falling_flag=False):
 
         if self.__onPaddle:
             # if the brick is on the paddle, grabbed, or in startup
@@ -233,7 +238,7 @@ class Ball(Thing):
         self.erase(grid)
 
         # placing the ball at the required coordinates after checking collisions
-        self.placeBall(grid, newX, newY, paddle,bricks,player,powerups)
+        self.placeBall(grid, newX, newY, paddle,bricks,player,powerups,falling_flag)
 
     def split(self,grid,paddle):
         onPaddle = self.isOnPaddle()

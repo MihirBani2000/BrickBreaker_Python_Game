@@ -273,13 +273,23 @@ def leftBricks(bricks):
                 return 1 
     return 0
 
-def printBricks(grid,bricks):
+def printBricks(grid,bricks,player,paddle,step=0):
     '''to print all the bricks'''
     if bricks:
+        game_over_flag = False
         for brick in bricks:
             bX,bY = brick.getPos()
+            _ , blenY = brick.getLength()
+            bY += step
+            pY = paddle.getPosY()
+            if bY+blenY > pY:
+                # game over, bricks touched the paddle
+                game_over_flag = True
             fig = brick.getFig()
             brick.placeBrick(grid,bX,bY,fig)
+        if game_over_flag:
+            player.GameOver(TIME_OVER)
+
 
 # BALLS related
 def delBalls(balls):
