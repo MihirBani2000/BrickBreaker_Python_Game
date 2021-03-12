@@ -23,8 +23,11 @@ class Player():
     def getTimer(self):
         return self.__timer
 
-    def setTimer(self):
-        self.__timer -= 1
+    def setTimer(self, val=1):
+        if val==1:
+            self.__timer -= val
+        else:
+            self.__timer = val
 
     def isGameOver(self):
         return self.__gameOver

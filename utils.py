@@ -37,104 +37,141 @@ def printLayout(bricks,grid,layout,xoffset=0,yoffset=1,custom=None):
             if brick!=None:
                 bricks.append(brick)
 
-def chooseLayout(bricks,grid):
+def chooseLayout(bricks,grid,level):
     '''makes the brick layout based on user choice'''
     obj_brick = Brick()
     br_xlen,br_ylen = obj_brick.getLength()
-    while True:
-        os.system('clear')
-        print("Select a valid option to continue: \n")
-        print("1. Layout 1: Boring\n")
-        print("2. Layout 2: Fun\n")
-        print("3. Layout 3: Death\n")
-        print("4. Exit")
-        option = input()
+    os.system('clear')
+    option = level
+    
+    if option == 1: 
+        '''LAYOUT 1'''
+
+        layout = [  "- - - - G G Y G G G G Y G - - - - -",
+                    "- - - Y C C - C Y C - C C Y - - - -",
+                    "- - - R Y G R R C R R G Y R - - - -",
+                ]
+        printLayout(bricks,grid,layout,2,3)
+
+    elif option == 2:
+        '''LAYOUT 2'''
+
+        layout = [  "- - - - R G C G R G C G R G C G R - - -",
+                    "- - - - - - - - - - - - - - - - - - - -",
+                    "- - - Y C G C C Y C R C Y C C G C Y - -",
+                    "- - - - - - G E E E E E E E G - - - - -",
+                    "- - R R Y R G R R Y R Y R R G R Y R R -",
+                ]
+        printLayout(bricks,grid,layout,0,0)
+    if option == 3:
+        '''Layout 3'''
+        layout = [  "- - - - - - G Y R C G R C R Y G - - - - -",
+                    "- - - - - Y C R G Y R G Y G R C Y - - - -",
+                    "- - - - - G - G - - - - - - G - G - - - -",
+                    "- - - - - R C Y E E E E E E Y C R - - - -",
+                    "- - - - - - R Y Y Y Y Y Y Y Y R - - - - -"
+                ]
+        printLayout(bricks,grid,layout,yoffset=0)
+
+
+# def chooseLayout(bricks,grid):
+#     '''makes the brick layout based on user choice'''
+#     obj_brick = Brick()
+#     br_xlen,br_ylen = obj_brick.getLength()
+#     while True:
+#         os.system('clear')
+#         print("Select a valid option to continue: \n")
+#         print("1. Layout 1: Boring\n")
+#         print("2. Layout 2: Fun\n")
+#         print("3. Layout 3: Death\n")
+#         print("4. Exit")
+#         option = input()
         
-        if option == '1': 
-            '''LAYOUT 1'''
+#         if option == '1': 
+#             '''LAYOUT 1'''
 
-            layout = [  "- - - - G G Y G G G G Y G - - - - -",
-                        "- - - Y C C - C Y C - C C Y - - - -",
-                        "- - - R Y G R R C R R G Y R - - - -",
-                    ]
-            printLayout(bricks,grid,layout,2,3)
+#             layout = [  "- - - - G G Y G G G G Y G - - - - -",
+#                         "- - - Y C C - C Y C - C C Y - - - -",
+#                         "- - - R Y G R R C R R G Y R - - - -",
+#                     ]
+#             printLayout(bricks,grid,layout,2,3)
 
-            # for i in range(1,11):
-            #     if i in [3,8]:
-            #         rbrick = GoldBrick(grid, i * (br_xlen+6), 15)
-            #         grbrick = GoldBrick(grid, i * (br_xlen+4)+10, 15 - 4*(br_ylen))
-            #     else :
-            #         rbrick = RedBrick(grid, i * (br_xlen+6), 15)
-            #         grbrick = GreenBrick(grid, i * (br_xlen+4)+10, 15 - 4*(br_ylen))
+#             # for i in range(1,11):
+#             #     if i in [3,8]:
+#             #         rbrick = GoldBrick(grid, i * (br_xlen+6), 15)
+#             #         grbrick = GoldBrick(grid, i * (br_xlen+4)+10, 15 - 4*(br_ylen))
+#             #     else :
+#             #         rbrick = RedBrick(grid, i * (br_xlen+6), 15)
+#             #         grbrick = GreenBrick(grid, i * (br_xlen+4)+10, 15 - 4*(br_ylen))
                 
-            #     if i in [1,5,6,10]:
-            #         cbrick = GoldBrick(grid, i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
-            #     else:    
-            #         cbrick = CyanBrick(grid, i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
-            #     bricks.append(rbrick)
-            #     bricks.append(grbrick)
-            #     bricks.append(cbrick)
-            break
+#             #     if i in [1,5,6,10]:
+#             #         cbrick = GoldBrick(grid, i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
+#             #     else:    
+#             #         cbrick = CyanBrick(grid, i * (br_xlen+5)+5 , 15 - 2*(br_ylen) )
+#             #     bricks.append(rbrick)
+#             #     bricks.append(grbrick)
+#             #     bricks.append(cbrick)
+#             break
 
-        elif option == '2':
-            '''LAYOUT 2'''
+#         elif option == '2':
+#             '''LAYOUT 2'''
 
-            layout = [  "- - - - R G C G R G C G R G C G R - - -",
-                        "- - - - - - - - - - - - - - - - - - - -",
-                        "- - - Y C G C C Y C R C Y C C G C Y - -",
-                        "- - - - - - G E E E E E E E G - - - - -",
-                        "- - R R Y R G R R Y R Y R R G R Y R R -",
-                    ]
-            printLayout(bricks,grid,layout,0,0)
-            # for i in range(6,13):
-            #     # if i in [5,13]:
-            #     brick = ExplodingBrick(grid, i * (br_xlen)+7, 13+br_ylen)
-            #     # elif i in [3,8,10,15]:
-            #     #     brick = GoldBrick(grid, i * (br_xlen)+7, 13)
-            #     # else:
-            #     #     brick = RedBrick(grid, i * (br_xlen)+7, 13)
-            #     bricks.append(brick)
-            # for i in range(1,18):
-            #     if i in [5,13]:
-            #         brick = GreenBrick(grid, i * (br_xlen)+7, 13)
-            #     elif i in [3,8,10,15]:
-            #         brick = GoldBrick(grid, i * (br_xlen)+7, 13)
-            #     else:
-            #         brick = RedBrick(grid, i * (br_xlen)+7, 13)
-            #     bricks.append(brick)
-            # for i in range(1,16):
-            #     if i in [8]:
-            #         brick = RedBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
-            #     elif i in [3,13]:
-            #         brick = GreenBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
-            #     elif i in [1,6,10,15]:
-            #         brick = GoldBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
-            #     else:
-            #         brick = CyanBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
-            #     bricks.append(brick)
-            # for i in range(1,14):
-            #     if i in [1,5,9,13]:
-            #         brick = RedBrick(grid, i * (br_xlen)+20, br_ylen)
-            #     elif i in [3,7,11]:
-            #         brick = CyanBrick(grid, i * (br_xlen)+20, br_ylen)
-            #     else :
-            #         brick = GreenBrick(grid, i * (br_xlen)+20, br_ylen)
-            #     bricks.append(brick)
-            break
-        if option =='3':
-            '''Layout 3'''
-            layout = [  "- - - - - - G Y R C G R C R Y G - - - - -",
-                        "- - - - - Y C R G Y R G Y G R C Y - - - -",
-                        "- - - - - G - G - - - - - - G - G - - - -",
-                        "- - - - - R C Y E E E E E E Y C R - - - -",
-                        "- - - - - - R Y Y Y Y Y Y Y Y R - - - - -"
-                    ]
-            printLayout(bricks,grid,layout,yoffset=0)
-            break
-        if option == '4' or option=='q':
-            exit()
-        else:
-            print("select a valid option")
+#             layout = [  "- - - - R G C G R G C G R G C G R - - -",
+#                         "- - - - - - - - - - - - - - - - - - - -",
+#                         "- - - Y C G C C Y C R C Y C C G C Y - -",
+#                         "- - - - - - G E E E E E E E G - - - - -",
+#                         "- - R R Y R G R R Y R Y R R G R Y R R -",
+#                     ]
+#             printLayout(bricks,grid,layout,0,0)
+#             # for i in range(6,13):
+#             #     # if i in [5,13]:
+#             #     brick = ExplodingBrick(grid, i * (br_xlen)+7, 13+br_ylen)
+#             #     # elif i in [3,8,10,15]:
+#             #     #     brick = GoldBrick(grid, i * (br_xlen)+7, 13)
+#             #     # else:
+#             #     #     brick = RedBrick(grid, i * (br_xlen)+7, 13)
+#             #     bricks.append(brick)
+#             # for i in range(1,18):
+#             #     if i in [5,13]:
+#             #         brick = GreenBrick(grid, i * (br_xlen)+7, 13)
+#             #     elif i in [3,8,10,15]:
+#             #         brick = GoldBrick(grid, i * (br_xlen)+7, 13)
+#             #     else:
+#             #         brick = RedBrick(grid, i * (br_xlen)+7, 13)
+#             #     bricks.append(brick)
+#             # for i in range(1,16):
+#             #     if i in [8]:
+#             #         brick = RedBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
+#             #     elif i in [3,13]:
+#             #         brick = GreenBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
+#             #     elif i in [1,6,10,15]:
+#             #         brick = GoldBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
+#             #     else:
+#             #         brick = CyanBrick(grid, i * (br_xlen)+13, 14 - 2*br_ylen)
+#             #     bricks.append(brick)
+#             # for i in range(1,14):
+#             #     if i in [1,5,9,13]:
+#             #         brick = RedBrick(grid, i * (br_xlen)+20, br_ylen)
+#             #     elif i in [3,7,11]:
+#             #         brick = CyanBrick(grid, i * (br_xlen)+20, br_ylen)
+#             #     else :
+#             #         brick = GreenBrick(grid, i * (br_xlen)+20, br_ylen)
+#             #     bricks.append(brick)
+#             break
+#         if option =='3':
+#             '''Layout 3'''
+#             layout = [  "- - - - - - G Y R C G R C R Y G - - - - -",
+#                         "- - - - - Y C R G Y R G Y G R C Y - - - -",
+#                         "- - - - - G - G - - - - - - G - G - - - -",
+#                         "- - - - - R C Y E E E E E E Y C R - - - -",
+#                         "- - - - - - R Y Y Y Y Y Y Y Y R - - - - -"
+#                     ]
+#             printLayout(bricks,grid,layout,yoffset=0)
+#             break
+#         if option == '4' or option=='q':
+#             exit()
+#         else:
+#             print("select a valid option")
 
 
 
@@ -169,7 +206,7 @@ def deleteActivePowerups(powerups,grid,paddle,balls,all=False):
             if round(time.time()) - power.getTime() >= POWER_TIME:
                 power.deActivate(grid,paddle,balls)
                 powerups.remove(power)
-                del power
+                # del power
                 return
     
     if all and powerups:
@@ -179,7 +216,7 @@ def deleteActivePowerups(powerups,grid,paddle,balls,all=False):
             delPowers.append(power)
         for power in delPowers:
             powerups.remove(power)
-            del power
+            # del power
         delPowers.clear()
         return    
     
@@ -192,7 +229,7 @@ def deleteAllPowerups(powerups,grid):
             delPowers.append(power)
         for power in delPowers:
             powerups.remove(power)
-            del power
+            # del power
         delPowers.clear()
         return    
 
@@ -226,7 +263,7 @@ def deleteBricks(bricks):
         if delBricks:
             for brick in delBricks:
                 bricks.remove(brick)
-                del brick
+                # del brick
     
 def leftBricks(bricks):
     '''to find the bricks that are left in the game other than Gold type'''
@@ -255,4 +292,4 @@ def delBalls(balls):
         if delBall:
             for ball in delBall:
                 balls.remove(ball)
-                del ball
+                # del ball

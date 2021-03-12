@@ -266,3 +266,24 @@ class ExplodingBrick(Brick):
         return False
 
     
+# class RainbowBrick(Brick):
+#     '''GreenBrick class
+#     green brick is the brick, with green color and strength = 1
+#     '''
+#     def __init__(self, grid,x, y):
+#         super().__init__(x, y)
+#         self.__maxStren = 1
+#         self.__currStren = self.__maxStren
+#         self.__color = Back.GREEN
+#         self._fig = super().makeBrick(self.__color)
+#         super().placeBrick(grid,x,y,self._fig)
+    
+#     def handleCollide(self,grid,player,powerups):
+
+#         if self.__maxStren - self.__currStren == 0:
+#             # first time of collision
+#             self.__currStren = 0
+#             self.__color = Back.BLACK
+#             self.erase(grid)
+#             self._isActive = False
+#             return True # returns true if brick broke
