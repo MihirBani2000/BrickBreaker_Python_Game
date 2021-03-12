@@ -8,8 +8,8 @@ class Ball(Thing):
     def __init__(self, x, y, grid, onPaddle=True):
         super().__init__(x,y)
         
-        self.__speedX = 0
-        self.__speedY = 0
+        self._speedX = 0
+        self._speedY = 0
 
         self._fig = BLUE + 'O' + RESET
         
@@ -27,7 +27,6 @@ class Ball(Thing):
         self.__onPaddle = onPaddle
         # if onPaddle == True:
         grid[y, x] = self._fig
-
 
     def isOutOfScreen(self):
         return self.__outOfScreen
@@ -55,45 +54,45 @@ class Ball(Thing):
 
     def setSpeed(self, val,val2=None, multiply=True):
         if multiply:
-            if abs(self.__speedX * val) <= MAX_SPEED_X:
-                self.__speedX = int(self.__speedX * val)            
-            if abs(self.__speedY * val) <= MAX_SPEED_Y:
-                self.__speedY = int(self.__speedY * val)            
+            if abs(self._speedX * val) <= MAX_SPEED_X:
+                self._speedX = int(self._speedX * val)            
+            if abs(self._speedY * val) <= MAX_SPEED_Y:
+                self._speedY = int(self._speedY * val)            
         else:
-            self.__speedX = val
-            self.__speedY = val2            
+            self._speedX = val
+            self._speedY = val2            
 
     def release(self, paddle):
         pX, pL = paddle.getPosX(), paddle.getLength()
         self.__onPaddle = False
-        self.__speedY = - 1
-        self.__speedX = - int((pX + int(pL / 2) - self._x)/2)
+        self._speedY = - 1
+        self._speedX = - int((pX + int(pL / 2) - self._x)/2)
 
-    def checkCollisionWall(self, x, y):
-        speedX, speedY = self.__speedX, self.__speedY
+    # def checkCollisionWall(self, x, y):
+    #     speedX, speedY = self._speedX, self._speedY
 
-        if x < LEFTWALL:   # left wall
-            x = LEFTWALL
-            self._x = x
-            speedX = -speedX
+    #     if x < LEFTWALL:   # left wall
+    #         x = LEFTWALL
+    #         self._x = x
+    #         speedX = -speedX
 
-        elif x > BOX_WIDTH - 1:   # right wall
-            x = BOX_WIDTH - 1
-            self._x = x
-            speedX = -speedX
+    #     elif x > BOX_WIDTH - 1:   # right wall
+    #         x = BOX_WIDTH - 1
+    #         self._x = x
+    #         speedX = -speedX
 
-        if y < 1:     # top wall
-            y = 1
-            self._y = y
-            speedY = -speedY
+    #     if y < 1:     # top wall
+    #         y = 1
+    #         self._y = y
+    #         speedY = -speedY
 
-        self.__speedX, self.__speedY = speedX, speedY
-        return x, y
+    #     self._speedX, self._speedY = speedX, speedY
+    #     return x, y
 
     def checkCollisionPaddle(self,grid, x, y, paddle):
         pX = paddle.getPosX()
         pL = paddle.getLength()
-        speedX, speedY = self.__speedX, self.__speedY
+        speedX, speedY = self._speedX, self._speedY
 
         if (pX <= x < pX + pL) or (pX <= self._x < pX + pL):
             # within the x coordinates of paddle
@@ -109,7 +108,7 @@ class Ball(Thing):
                 else:
                     # speedX changed according to the position of contact wrt to the mid of paddle
                     delta_speedX = -int( (pX + int(pL / 2) - self._x)/2)
-                    if abs(self.__speedX + delta_speedX) <= MAX_SPEED_X:
+                    if abs(self._speedX + delta_speedX) <= MAX_SPEED_X:
                         speedX += delta_speedX               
                     speedY = -speedY
                     
@@ -120,11 +119,11 @@ class Ball(Thing):
             self.__outOfScreen = True
             speedX = speedY = 0
 
-        self.__speedX, self.__speedY = speedX, speedY
+        self._speedX, self._speedY = speedX, speedY
         return x,y
 
     def checkCollisionBricks(self,grid, x, y, bricks,player,powerups):
-        speedX, speedY = self.__speedX, self.__speedY
+        speedX, speedY = self._speedX, self._speedY
 
         # storing a copy of x,y for thru ball
         tempx, tempy = x,y
@@ -136,10 +135,10 @@ class Ball(Thing):
                 bX,bY = brick.getPos()
                 bX_len, bY_len = brick.getLength()
                 
-                mean_x = self._x + (self.__speedX)/2
-                mean_y = self._y + (self.__speedY)/2
-                sec_mean_x = self._x + (self.__speedX)/4
-                sec_mean_y = self._y + (self.__speedY)/4
+                mean_x = self._x + (self._speedX)/2
+                mean_y = self._y + (self._speedY)/2
+                sec_mean_x = self._x + (self._speedX)/4
+                sec_mean_y = self._y + (self._speedY)/4
                 
                 inside_flag = (bX <= x < bX + bX_len) and (bY <= y < bY + bY_len)
                 mean_inside_flag = (bX <= mean_x < bX + bX_len) and (bY <= mean_y < bY + bY_len)
@@ -197,12 +196,12 @@ class Ball(Thing):
                                 player.updateScores(BREAK_SCORE)
 
                     if break_flag:
-                        spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups)
+                        spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups,self)
 
         if self.isThru():
             x,y = tempx,tempy
         else:
-            self.__speedX, self.__speedY = speedX, speedY
+            self._speedX, self._speedY = speedX, speedY
         return x,y
 
     def placeBall(self, grid, x, y, paddle,bricks,player,powerups):
@@ -229,8 +228,8 @@ class Ball(Thing):
             self.moveWithPaddle(grid,newx)
             return
 
-        newX = self._x + self.__speedX
-        newY = self._y + self.__speedY
+        newX = self._x + self._speedX
+        newY = self._y + self._speedY
         self.erase(grid)
 
         # placing the ball at the required coordinates after checking collisions
@@ -240,10 +239,10 @@ class Ball(Thing):
         onPaddle = self.isOnPaddle()
         if not onPaddle:
             newball = Ball(self._x,self._y,grid,onPaddle)
-            self.__speedX = int(self.__speedX/2)
-            if self.__speedX == 0:
-                self.__speedX = 1
-            newball.setSpeed(-self.__speedX,self.__speedY,False)
+            self._speedX = int(self._speedX/2)
+            if self._speedX == 0:
+                self._speedX = 1
+            newball.setSpeed(-self._speedX,self._speedY,False)
         else:
             pX = paddle.getPosX()
             pL = paddle.getLength() 

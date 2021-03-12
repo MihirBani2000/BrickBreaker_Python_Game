@@ -122,6 +122,11 @@ if __name__ == '__main__':
                 # moving the ball to correct place
                 ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups)
 
+            # if bullets:
+                # for bullet in bullets:
+                #     # moving the ball to correct place
+                #     bullet.move(myGrid.getGrid(),bricks,myPlayer,powerups)
+
             
             # delete the inactive bricks
             deleteBricks(bricks)

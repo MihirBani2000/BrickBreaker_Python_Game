@@ -1,17 +1,19 @@
 import time
-
-from numpy.lib.arraypad import pad
 from config import *
 from thing import Thing
 
 class Powerup(Thing):
 
-    def __init__(self,x,y):
+    def __init__(self,x,y,ball):
         super().__init__(x,y)      
 
         self._isActive = False
         self._time = None
-        self._speedY = 1
+        self._speedX, self._speedY = ball.getSpeed()
+        if self._speedX > 0 :
+            self._speedX = min(self._speedX,2)
+        else:
+            self._speedX = max(self._speedX,-2)    
         self._onScreen = True
         self._fig = Back.GREEN + "P" + RESET
     
@@ -36,13 +38,20 @@ class Powerup(Thing):
     def getTime(self):
         return self._time
 
+    def gravityEffect(self):
+        self._speedY += GRAVITY
+        if self._speedY<0:
+            self._speedY = max(self._speedY,-MAX_SPEED_Y)
+        else:
+            self._speedY = min(self._speedY,MAX_SPEED_Y)
+
     def checkCollisionPaddle(self,grid, x, y, paddle=None,balls=None):
         pX = paddle.getPosX()
         pL = paddle.getLength()
         activationFlag = False
         ball_list = []
         isMultiple = isinstance(self,MultipleBall)
-        if pX <= x <= pX + pL:
+        if (pX <= x < pX + pL) or (pX <= self._x < pX + pL):
             # within the x coordinates of paddle
             if y > HEIGHT - 3:
                 # Colliding with the paddle
@@ -60,6 +69,7 @@ class Powerup(Thing):
             self.erase(grid)
             self._onScreen = False
 
+        self._x = x
         self._y = y
         if isMultiple:
             return ball_list
@@ -73,17 +83,23 @@ class Powerup(Thing):
 
         if self._onScreen:
 
+            self.gravityEffect()
+            newX = self._x + self._speedX
             newY = self._y + self._speedY
+
             self.erase(grid)
+            
+            temp_x,temp_y = self.checkCollisionWall(newX,newY)
 
             if isMultiple:
-                ball_list = self.checkCollisionPaddle(grid,self._x,newY,paddle,balls)
+                ball_list = self.checkCollisionPaddle(grid,temp_x,temp_y,paddle,balls)
             else:
-                activationFlag = self.checkCollisionPaddle(grid,self._x,newY,paddle,balls)
+                activationFlag = self.checkCollisionPaddle(grid,temp_x,temp_y,paddle,balls)
 
             # placing the powerup at the required coordinates after checking collisions
-            if grid[self._y,self._x]  == ' ' and (self._y < HEIGHT-3):
-                grid[self._y,self._x] = self._fig
+            # if grid[int(self._y),int(self._x)]  == ' ' and (self._y < HEIGHT-3):
+            if (self._y < HEIGHT-3):
+                grid[int(self._y),int(self._x)] = self._fig
 
         if isMultiple:
             return ball_list
@@ -97,8 +113,8 @@ class Powerup(Thing):
         # paddle grab
 class ExpandPaddle(Powerup):
     '''expands the paddle by 2 units'''
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
         self._fig = EXPAND_FIG
 
     def activate(self,grid,paddle,balls):
@@ -117,8 +133,8 @@ class ExpandPaddle(Powerup):
 class ShrinkPaddle(Powerup):
     '''shrinks the paddle by 2 units'''
 
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
         self._fig = SHRINK_FIG
     
     def activate(self,grid,paddle,balls):
@@ -137,8 +153,8 @@ class ShrinkPaddle(Powerup):
 class GrabPaddle(Powerup):
     '''grabs the ball onto the paddle'''
 
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
         self._fig = GRAB_FIG
         
     def activate(self,grid,paddle,balls):
@@ -162,8 +178,8 @@ class GrabPaddle(Powerup):
 
 class FastBall(Powerup):
     '''Increases the ball speed upto a limit'''
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
         self._fig = FAST_FIG
     
     def activate(self,grid,paddle,balls):
@@ -182,8 +198,8 @@ class FastBall(Powerup):
 
 class ThruBall(Powerup):
     '''makes the ball to go past all bricks, by destroying it'''
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
         self._fig = THRU_FIG
     
     def activate(self,grid,paddle,balls):
@@ -202,8 +218,8 @@ class ThruBall(Powerup):
 
 class MultipleBall(Powerup):
     '''Increases the ball speed upto a limit'''
-    def __init__(self, x, y):
-        super().__init__(x, y)
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
         self._fig = MULITPLE_FIG
     
     def activate(self,grid,paddle,balls):

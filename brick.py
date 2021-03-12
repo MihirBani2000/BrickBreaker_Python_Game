@@ -13,6 +13,7 @@ class Brick(Thing):
         self._isActive = True
         self._isGold = False
         self._isExplode = False
+        self._isRainbow = True
         self._isVisited = False
         
     def getPos(self):
@@ -48,6 +49,9 @@ class Brick(Thing):
     
     def isExploding(self):
         return self._isExplode
+    
+    def isRainbow(self):
+        return self._isRainbow
     
     def isVisited(self):
         return self._isVisited
@@ -119,6 +123,7 @@ class Brick(Thing):
 # RED = 3
 # CYAN = 2
 # GREEN = 1
+# RAINBOW = changes between RED, CYAN, GREEN randomly until touched by ball
 
 class RedBrick(Brick):
     '''RedBrick class

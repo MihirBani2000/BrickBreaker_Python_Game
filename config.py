@@ -47,6 +47,7 @@ MAX_SPEED_Y = 2         # 2 units, max speed of ball in y dir
 EXPAND = 2              # 2 units
 SHRINK = 2              # 2 units
 FAST_MULTIPLIER = 2     # 2 units
+GRAVITY = 0.1
 
 # Powerups symbols
 EXPAND_FIG = Back.MAGENTA + WHITE + BOLD + 'L' + RESET
