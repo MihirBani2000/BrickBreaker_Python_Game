@@ -20,6 +20,9 @@ class Bullet(Thing):
 
     def isOutOfScreen(self):
         return self.__outOfScreen
+    
+    def delete(self):
+        self.__outOfScreen = True
 
     def checkCollisionWall(self, x, y):
         if not self.__outOfScreen:
@@ -33,7 +36,7 @@ class Bullet(Thing):
 
     def checkCollisionBricks(self,grid, x, y, bricks,player,powerups):
         speedY = self._speedY
-
+        tempbricks = []
         for brick in bricks:
             if brick.isActive():
                 # conditions for checking the collision of bullet with brick
@@ -49,17 +52,27 @@ class Bullet(Thing):
                     brick_flag = True
 
                 if brick_flag:
+                    break_flag = False
                     # on collision
-                    if brick.isExploding():
+                    if brick.isRainbow():
+                            player.updateScores(HIT_SCORE)
+                            newBrick = brick.handleCollide(grid,player,powerups)
+                            tempbricks.append(newBrick)
+                            # break
+                    elif brick.isExploding():
                         break_flag = brick.handleCollide(grid,player,powerups,bricks)
                     else:
                         player.updateScores(HIT_SCORE)
                         break_flag = brick.handleCollide(grid,player,powerups)
                         if break_flag:
                             player.updateScores(BREAK_SCORE)
-
-                    spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups,self)
-      
+                
+                    if break_flag:
+                        spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups,self)
+        if tempbricks:
+            for brick in tempbricks:
+                bricks.append(brick)      
+        
         self._speedY = speedY
         return x,y
 

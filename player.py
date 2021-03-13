@@ -45,14 +45,25 @@ class Player():
             # showmessage(LIVES_OVER, self)
             self.GameOver(LIVES_OVER)
 
-    def showStats(self):
+    def showStats(self,paddle,powerups,boss = None):
         print(
             Back.RED +
             Fore.WHITE +
             Style.BRIGHT +
             "B R I C K B R E A K E R".center(WIDTH) +
             RESET)
-        print(Back.WHITE + Fore.RED + Style.BRIGHT + ''.center(WIDTH) + RESET)
+        # print(Back.WHITE + Fore.RED + Style.BRIGHT + ''.center(WIDTH) + RESET)
+        
+        print(Back.WHITE + Fore.BLACK + " Expand Paddle: " + EXPAND_FIG
+              + Back.WHITE + Fore.BLACK + " | Shrink Paddle: " + SHRINK_FIG
+              + Back.WHITE + Fore.BLACK + " | Grab Paddle: " + GRAB_FIG
+              + Back.WHITE + Fore.BLACK + " | Shooting Paddle: " + SHOOT_FIG
+              + Back.WHITE + Fore.BLACK + " | Fast Ball: " + FAST_FIG
+              + Back.WHITE + Fore.BLACK + " | Thru Ball: " + THRU_FIG
+              + Back.WHITE + Fore.BLACK + " | Fire Ball: " + FIRE_FIG
+              + Back.WHITE + Fore.BLACK + " | Multiple Ball: " + MULITPLE_FIG
+              + Back.WHITE + Fore.BLACK +" ".center(12) + RESET)
+        
         print(
             Back.RED +
             Fore.WHITE +
@@ -62,16 +73,22 @@ class Player():
                 self.getScores(),
                 self.getTimer()).center(WIDTH) +
             RESET)
-        print(Back.BLACK + Fore.WHITE + Style.BRIGHT
-              + "\tExpand Paddle: " + EXPAND_FIG
-              + "\tShrink Paddle: " + SHRINK_FIG
-              + "\tGrab Paddle: " + GRAB_FIG
-              + "\tShooting Paddle: " + SHOOT_FIG
-              + "\tFast Ball: " + FAST_FIG
-              + "\tThru Ball: " + THRU_FIG
-              + "\tFire Ball: " + FIRE_FIG
-              + "\tMultiple Ball: " + MULITPLE_FIG
-              + RESET)
+
+        shootPaddleTime = 0
+        for power in powerups:
+            if isinstance(power,ShootPaddle):
+                shootPaddleTime =  POWER_TIME - round(time.time() - power.getTime())
+        
+        bossLives = 0
+        # if boss:
+        #     if isinstance(power,ShootPaddle):
+        #         shootPaddleTime = round(time.time() - power.getTime())
+
+        print(
+            Back.RED + Fore.WHITE + Style.BRIGHT +
+            "Shooting Paddle Time Left: {}         Boss Lives Left: {}".format(
+                shootPaddleTime, self.getTimer()).center(WIDTH) + RESET
+            )
 
     def showmessage(self, msg):
         """Displays the message according to the condition, at end of game"""

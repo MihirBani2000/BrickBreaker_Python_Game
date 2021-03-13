@@ -185,8 +185,8 @@ def spawnPowerups(x,y,powerups,ball):
 
     # taking 40% chance of spawing a new powerup
     if random.random() <= probability:
-        randChoice = random.randint(0,5)
-        # randChoice = 1
+        randChoice = random.randint(0,7)
+        # randChoice = 6
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y,ball)
@@ -200,13 +200,13 @@ def spawnPowerups(x,y,powerups,ball):
             power = ThruBall(x,y,ball)
         elif randChoice ==5:
             power = FireBall(x,y,ball)
-        # elif randChoice ==6:
-        #     power = ShootPaddle(x,y,ball)
+        elif randChoice ==6:
+            power = ShootPaddle(x,y,ball)
         else:
             power = MultipleBall(x,y,ball)
         powerups.append(power)
 
-def deleteActivePowerups(powerups,grid,paddle,balls,all=False):
+def deleteActivePowerups(powerups,grid,paddle,balls,bullets,all=False):
     '''to delete and deactivate the powerups'''
     if not all and powerups:
         for power in powerups:
@@ -216,6 +216,10 @@ def deleteActivePowerups(powerups,grid,paddle,balls,all=False):
                 # del power
                 return
     
+    if all and bullets:
+        for bullet in bullets:
+            bullet.delete()
+
     if all and powerups:
         delPowers = []
         for power in powerups:
@@ -225,7 +229,8 @@ def deleteActivePowerups(powerups,grid,paddle,balls,all=False):
             powerups.remove(power)
             # del power
         delPowers.clear()
-        return    
+        return
+    
     
 def deleteAllPowerups(powerups,grid):
     '''to delete all the powerups'''
@@ -255,7 +260,6 @@ def movePowerups(powerups,activatedPowerups,grid,paddle,player,balls):
         if delPower:
             for power in delPower:
                 powerups.remove(power)
-
 
 
 # BRICK related
@@ -310,3 +314,15 @@ def delBalls(balls):
             for ball in delBall:
                 balls.remove(ball)
                 # del ball
+
+# BULLETS related
+def delBullets(bullets):
+    '''to delete the balls which are not active anymore'''
+    if bullets:
+        delbullet = []
+        for bullet in bullets:
+            if bullet.isOutOfScreen():
+                delbullet.append(bullet)
+        if delbullet:
+            for bullet in delbullet:
+                bullets.remove(bullet)

@@ -13,6 +13,7 @@ from ball import *
 from paddle import *
 from player import *
 from powerups import *
+from bullet import *
 
 def action(ch,level):
     """takes action according to the keyboard input"""
@@ -83,10 +84,14 @@ if __name__ == '__main__':
         # flag for activation of falling bricks
         falling_flag = 0
         
+        # bullets for shooting powerup
+        bullets = []
+
         # storing the time values, used later
         start_time = time.time()
         curr_time = time.time()
         seconds_time = time.time()
+        bullet_start_time = time.time()
         myPlayer.setTimer(GAME_TIME)
 
         # main loop of the game
@@ -122,9 +127,26 @@ if __name__ == '__main__':
                 # check all the powerups, movement, activation and deactivation
                 movePowerups(powerups,activatedPowerups,myGrid.getGrid(), myPaddle,myPlayer,balls)
                 # check the active powerups and deactive/delete accordingly
-                deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,balls)
+                deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,balls,bullets)
 
+                # shooting bullets
+                if myPaddle.isShooting():
+                    temp_diff = time.time() - bullet_start_time
+                    if SHOOTING_INTERVAL <= temp_diff:
+                        bullet_start_time = time.time()
+                        x1,y1 = myPaddle.getPosX(), myPaddle.getPosY() 
+                        pL = myPaddle.getLength()
+                        x2 = x1 + pL - 1
+                        bullet1 = Bullet(x1,y1-1, myGrid.getGrid())
+                        bullets.append(bullet1)
+                        bullet2 = Bullet(x2,y1-1, myGrid.getGrid())
+                        bullets.append(bullet2)
+                else:
+                    bullet_start_time = time.time() - SHOOTING_INTERVAL
 
+                # delete the old bullets
+                delBullets(bullets)
+                
                 # if the last/only ball is out of the screen
                 delBalls(balls)
                 if not balls:
@@ -138,7 +160,7 @@ if __name__ == '__main__':
 
                     #  deactivate/delete every powerup, already activated or not
                     deleteAllPowerups(powerups,myGrid.getGrid())
-                    deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,balls,all=True)
+                    deleteActivePowerups(activatedPowerups,myGrid.getGrid(),myPaddle,balls,bullets,all=True)
 
 
                 # exit the loop if the game is over
@@ -149,10 +171,10 @@ if __name__ == '__main__':
                     # moving the ball to correct place
                     ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups,falling_flag)
 
-                # if bullets:
-                    # for bullet in bullets:
-                    #     # moving the ball to correct place
-                    #     bullet.move(myGrid.getGrid(),bricks,myPlayer,powerups)
+                if bullets:
+                    for bullet in bullets:
+                        # moving the ball to correct place
+                        bullet.move(myGrid.getGrid(),bricks,myPlayer,powerups)
 
                 
                 # delete the inactive bricks
@@ -179,7 +201,7 @@ if __name__ == '__main__':
                     exit()
                 
                 # print the stats and the top header of the game session
-                myPlayer.showStats()
+                myPlayer.showStats(myPaddle,activatedPowerups)
                 myBox.createBox(myGrid.getGrid())
                 myGrid.printGrid()
 

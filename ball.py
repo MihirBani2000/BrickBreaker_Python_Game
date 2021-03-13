@@ -78,27 +78,6 @@ class Ball(Thing):
         self._speedY = - 1
         self._speedX = - int((pX + int(pL / 2) - self._x)/2)
 
-    # def checkCollisionWall(self, x, y):
-    #     speedX, speedY = self._speedX, self._speedY
-
-    #     if x < LEFTWALL:   # left wall
-    #         x = LEFTWALL
-    #         self._x = x
-    #         speedX = -speedX
-
-    #     elif x > BOX_WIDTH - 1:   # right wall
-    #         x = BOX_WIDTH - 1
-    #         self._x = x
-    #         speedX = -speedX
-
-    #     if y < 1:     # top wall
-    #         y = 1
-    #         self._y = y
-    #         speedY = -speedY
-
-    #     self._speedX, self._speedY = speedX, speedY
-    #     return x, y
-
     def checkCollisionPaddle(self,grid, x, y, paddle,bricks,player,falling_flag=False):
         pX = paddle.getPosX()
         pL = paddle.getLength()
@@ -142,7 +121,7 @@ class Ball(Thing):
 
         # storing a copy of x,y for thru ball
         tempx, tempy = x,y
-
+        tempbricks = []
         for brick in bricks:
             if brick.isActive():
                 # conditions for checking the collision of ball with brick
@@ -211,8 +190,8 @@ class Ball(Thing):
                         if brick.isRainbow():
                             player.updateScores(HIT_SCORE)
                             newBrick = brick.handleCollide(grid,player,powerups)
-                            bricks.append(newBrick)
-                            break
+                            tempbricks.append(newBrick)
+                            # break
 
                         elif brick.isExploding():
                             break_flag = brick.handleCollide(grid,player,powerups,bricks)
@@ -224,7 +203,11 @@ class Ball(Thing):
 
                     if break_flag:
                         spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups,self)
-
+        
+        if tempbricks:
+            for brick in tempbricks:
+                bricks.append(brick)
+        
         if self.isThru():
             x,y = tempx,tempy
         else:

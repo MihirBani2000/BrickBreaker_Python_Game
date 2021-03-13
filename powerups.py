@@ -8,7 +8,7 @@ class Powerup(Thing):
         super().__init__(x,y)      
 
         self._isActive = False
-        self._time = None
+        self.time = None
         self._speedX, self._speedY = ball.getSpeed()
         if self._speedX > 0:
             self._speedX = 1
@@ -26,7 +26,7 @@ class Powerup(Thing):
 
         if not self._isActive:
             self._isActive = True
-            self._time = time.time()
+            self.time = time.time()
             return True
         return False
 
@@ -40,7 +40,10 @@ class Powerup(Thing):
         return True
 
     def getTime(self):
-        return self._time
+        return self.time
+
+    def isActive(self):
+        return self._isActive
 
     def gravityEffect(self):
         self._speedY += GRAVITY
@@ -183,15 +186,18 @@ class ShootPaddle(Powerup):
         self._fig = SHOOT_FIG
         
     def activate(self,grid,paddle,balls):
-        if super().activate():
-            paddle.setShooting(True)
-            return True
+        if not paddle.isShooting():
+            if super().activate():
+                self._isActive = True
+                paddle.setShooting(True,grid)
+                return True
         return False
 
     def deActivate(self,grid,paddle,balls):
-        if super().deActivate():
-            paddle.setShooting(False)
-            return True
+        if paddle.isShooting:
+            if super().deActivate():
+                paddle.setShooting(False,grid)
+                return True
         return False
 
 # Ball powerups

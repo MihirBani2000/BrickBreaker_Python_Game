@@ -24,8 +24,23 @@ class Paddle(Thing):
     def isShooting(self):
         return self._isShooting
 
-    def setShooting(self,val):
+    def setShooting(self,val,grid):
         self._isShooting = val
+        self.changeFig(val,grid)
+
+    def getFig(self,fig):
+        return self._fig
+
+    def changeFig(self, shoot,grid):
+        if shoot:
+            fig = np.full((1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
+            fig[0,0] = YELLOW + '^' + RESET
+            fig[0,-1] = YELLOW + '^' + RESET
+            self._fig = fig
+        else:
+            self._fig = np.full(
+            (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
+        self.placePaddle(grid,self._x)
 
     def updateLength(self,grid,val):
         self.erase(grid)
