@@ -1,3 +1,4 @@
+import random
 from config import *
 from utils import *
 from thing import Thing
@@ -13,7 +14,7 @@ class Brick(Thing):
         self._isActive = True
         self._isGold = False
         self._isExplode = False
-        self._isRainbow = True
+        self._isRainbow = False
         self._isVisited = False
         
     def getPos(self):
@@ -257,7 +258,6 @@ class ExplodingBrick(Brick):
 
 
     def handleCollide(self,grid,player,powerups,bricks):
-        
         if self.__maxStren - self.__currStren == 0:
             # first time of collision
             self.__currStren = 0
@@ -268,24 +268,39 @@ class ExplodingBrick(Brick):
         return False
 
     
-# class RainbowBrick(Brick):
-#     '''GreenBrick class
-#     green brick is the brick, with green color and strength = 1
-#     '''
-#     def __init__(self, grid,x, y):
-#         super().__init__(x, y)
-#         self.__maxStren = 1
-#         self.__currStren = self.__maxStren
-#         self.__color = Back.GREEN
-#         self._fig = super().makeBrick(self.__color)
-#         super().placeBrick(grid,x,y,self._fig)
+class RainbowBrick(Brick):
+    '''RainbowBrick class
+    rainbow brick changes between Red, Cyan and Green Brick 
+    untill collided for the first time
+    '''
+    def __init__(self, grid,x, y):
+        super().__init__(x, y)
+        self._isRainbow = True
+        self.figs = []
+        colors = [Back.GREEN,Back.CYAN,Back.RED]
+        for color in colors:
+            self._fig = super().makeBrick(color)
+            self.figs.append(self._fig)
+        self.type = random.randint(0,2)
+        self._fig = self.figs[self.type] 
+        self.placeBrick(grid,x,y)
     
-#     def handleCollide(self,grid,player,powerups):
+    def placeBrick(self, grid, x,y, fig=None):
+        self.erase(grid,False)
+        if self._isActive:
+            self._x,self._y = x,y
+            self.type = random.randint(0,2)
+            self._fig = self.figs[self.type]
+            grid[y:y+self._lengthY, x:x + self._lengthX] = self._fig
 
-#         if self.__maxStren - self.__currStren == 0:
-#             # first time of collision
-#             self.__currStren = 0
-#             self.__color = Back.BLACK
-#             self.erase(grid)
-#             self._isActive = False
-#             return True # returns true if brick broke
+    def handleCollide(self,grid,player,powerups):
+        # first time of collision
+        self.erase(grid)
+        if self.type == 0:
+            newBrick = GreenBrick(grid,self._x,self._y)
+        elif self.type == 1:
+            newBrick = CyanBrick(grid,self._x,self._y)
+        else:
+            newBrick = RedBrick(grid,self._x,self._y)
+
+        return newBrick # returns new brick formed if rainbowBrick is collided 

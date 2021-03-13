@@ -21,7 +21,9 @@ def printLayout(bricks,grid,layout,xoffset=0,yoffset=1,custom=None):
         for (cind,char) in enumerate(row):
             # print("rind",rind, " cind",cind)
             brick = None
-            if char == 'G': #green
+            if char == 'A': #rainbow
+                brick = RainbowBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+            elif char == 'G': #green
                 brick = GreenBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
             elif char == 'R': #red
                 brick = RedBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
@@ -47,28 +49,28 @@ def chooseLayout(bricks,grid,level):
     if option == 1: 
         '''LAYOUT 1'''
 
-        layout = [  "- - - - G G Y G G G G Y G - - - - -",
+        layout = [  "- - - - A G Y G A G Y G A - - - - -",
                     "- - - Y C C - C Y C - C C Y - - - -",
-                    "- - - R Y G R R C R R G Y R - - - -",
+                    "- - A R Y G A R C R A G Y R A - - -",
                 ]
         printLayout(bricks,grid,layout,2,3)
 
     elif option == 2:
         '''LAYOUT 2'''
 
-        layout = [  "- - - - R G C G R G C G R G C G R - - -",
+        layout = [  "- - - - A G C G R G A G R G C G A - - -",
                     "- - - - - - - - - - - - - - - - - - - -",
-                    "- - - Y C G C C Y C R C Y C C G C Y - -",
+                    "- - - Y C G A C Y C R C Y C A G C Y - -",
                     "- - - - - - G E E E E E E E G - - - - -",
-                    "- - R R Y R G R R Y R Y R R G R Y R R -",
+                    "- - A R Y R G A R Y R Y R A G R Y R A -",
                 ]
         printLayout(bricks,grid,layout,0,0)
     if option == 3:
         '''Layout 3'''
         layout = [  "- - - - - - G Y R C G R C R Y G - - - - -",
-                    "- - - - - Y C R G Y R G Y G R C Y - - - -",
-                    "- - - - - G - G - - - - - - G - G - - - -",
-                    "- - - - - R C Y E E E E E E Y C R - - - -",
+                    "- - - - A Y C A G Y R G Y G A C Y A - - -",
+                    "- - - - A G - G - - A A - - G - G A - - -",
+                    "- - - - A R C Y E E E E E E Y C R A - - -",
                     "- - - - - - R Y Y Y Y Y Y Y Y R - - - - -"
                 ]
         printLayout(bricks,grid,layout,yoffset=0)
@@ -184,6 +186,7 @@ def spawnPowerups(x,y,powerups,ball):
     # taking 40% chance of spawing a new powerup
     if random.random() <= probability:
         randChoice = random.randint(0,5)
+        # randChoice = 4
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y,ball)

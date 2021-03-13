@@ -10,10 +10,14 @@ class Powerup(Thing):
         self._isActive = False
         self._time = None
         self._speedX, self._speedY = ball.getSpeed()
-        if self._speedX > 0 :
-            self._speedX = min(self._speedX,2)
-        else:
-            self._speedX = max(self._speedX,-2)    
+        if self._speedX > 0:
+            self._speedX = 1
+        elif self._speedX < 0 :
+            self._speedX = -1
+        if self._speedY > 0:
+            self._speedY = 1
+        elif self._speedY < 0 :
+            self._speedY = -1    
         self._onScreen = True
         self._fig = Back.GREEN + "P" + RESET
     

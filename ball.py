@@ -1,3 +1,4 @@
+from brick import Brick
 from utils import *
 from config import *
 from thing import Thing
@@ -183,6 +184,7 @@ class Ball(Thing):
                             brick_flag = True
 
                 if brick_flag:
+                    break_flag = False
                     # on collision
                     if self.isThru():
                         # if thru ball
@@ -192,7 +194,13 @@ class Ball(Thing):
                             break_flag = brick.explode(grid,player)
 
                     else:
-                        if brick.isExploding():
+                        if brick.isRainbow():
+                            player.updateScores(HIT_SCORE)
+                            newBrick = brick.handleCollide(grid,player,powerups)
+                            bricks.append(newBrick)
+                            break
+
+                        elif brick.isExploding():
                             break_flag = brick.handleCollide(grid,player,powerups,bricks)
                         else:
                             player.updateScores(HIT_SCORE)
