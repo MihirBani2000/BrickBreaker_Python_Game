@@ -12,11 +12,20 @@ class Paddle(Thing):
 
         self._lengthX = 11
         
+        # shooting powerup
+        self._isShooting = False
+
         self._fig = np.full(
             (1, self._lengthX), MAGENTA + '=' + RESET, dtype='<U20')
 
     def getLength(self):
         return self._lengthX
+
+    def isShooting(self):
+        return self._isShooting
+
+    def setShooting(self,val):
+        self._isShooting = val
 
     def updateLength(self,grid,val):
         self.erase(grid)

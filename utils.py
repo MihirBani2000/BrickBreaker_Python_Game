@@ -186,7 +186,7 @@ def spawnPowerups(x,y,powerups,ball):
     # taking 40% chance of spawing a new powerup
     if random.random() <= probability:
         randChoice = random.randint(0,5)
-        # randChoice = 4
+        # randChoice = 1
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y,ball)
@@ -198,6 +198,10 @@ def spawnPowerups(x,y,powerups,ball):
             power = GrabPaddle(x,y,ball)
         elif randChoice ==4:
             power = ThruBall(x,y,ball)
+        elif randChoice ==5:
+            power = FireBall(x,y,ball)
+        # elif randChoice ==6:
+        #     power = ShootPaddle(x,y,ball)
         else:
             power = MultipleBall(x,y,ball)
         powerups.append(power)

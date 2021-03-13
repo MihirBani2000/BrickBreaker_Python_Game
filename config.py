@@ -35,11 +35,12 @@ EXPLODE_SCORE = HIT_SCORE + BREAK_SCORE    # points on exploding/thru any brick
 LIFE_PENALTY = -30  # 30 points penalty in case of losing a life
 
 # Brick Types
-# GOLD_BR = "G"
+# GOLD_BR = "Y"
 # EXPLODING_BR = "E"
 # RED_BR = "R"
 # GREEN_BR = "G"
 # CYAN_BR = "C"
+# RAINBOW_BR = "A"
 
 # Powerups constants
 MIN_PADDLE_LENGTH = 7   # 5 units
@@ -52,11 +53,15 @@ FAST_MULTIPLIER = 2     # 2 units
 GRAVITY = 0.1
 
 # Powerups symbols
+# Paddle related
 EXPAND_FIG = Back.MAGENTA + WHITE + BOLD + 'L' + RESET
 SHRINK_FIG = Back.MAGENTA + WHITE + BOLD + 'S' + RESET
 GRAB_FIG = Back.MAGENTA + WHITE + BOLD + 'G' + RESET
+SHOOT_FIG = Back.MAGENTA + WHITE + BOLD + 'B' + RESET
+# Ball related
 FAST_FIG = Back.BLUE + WHITE + BOLD + 'F' + RESET
 THRU_FIG = Back.BLUE + WHITE + BOLD + 'T' + RESET
+FIRE_FIG = Back.BLUE + WHITE + BOLD + 'I' + RESET
 MULITPLE_FIG = Back.BLUE + WHITE + BOLD + 'M' + RESET
 
 # sizes

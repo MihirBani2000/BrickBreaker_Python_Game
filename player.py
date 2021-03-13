@@ -66,8 +66,10 @@ class Player():
               + "\tExpand Paddle: " + EXPAND_FIG
               + "\tShrink Paddle: " + SHRINK_FIG
               + "\tGrab Paddle: " + GRAB_FIG
-              + "\t\tFast Ball: " + FAST_FIG
+              + "\tShooting Paddle: " + SHOOT_FIG
+              + "\tFast Ball: " + FAST_FIG
               + "\tThru Ball: " + THRU_FIG
+              + "\tFire Ball: " + FIRE_FIG
               + "\tMultiple Ball: " + MULITPLE_FIG
               + RESET)
 

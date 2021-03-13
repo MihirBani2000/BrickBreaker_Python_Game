@@ -175,10 +175,30 @@ class GrabPaddle(Powerup):
             return True
         return False
 
+class ShootPaddle(Powerup):
+    '''grabs the ball onto the paddle'''
+
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
+        self._fig = SHOOT_FIG
+        
+    def activate(self,grid,paddle,balls):
+        if super().activate():
+            paddle.setShooting(True)
+            return True
+        return False
+
+    def deActivate(self,grid,paddle,balls):
+        if super().deActivate():
+            paddle.setShooting(False)
+            return True
+        return False
+
 # Ball powerups
         # fast ball
         # thru ball
         # ball multiplier
+        # fire ball
 
 class FastBall(Powerup):
     '''Increases the ball speed upto a limit'''
@@ -244,5 +264,25 @@ class MultipleBall(Powerup):
                     delball = balls.pop()
                     delball.erase(grid)
                     del delball
+            return True
+        return False
+
+class FireBall(Powerup):
+    '''exploding bricks in contact'''
+    def __init__(self, x, y,ball):
+        super().__init__(x, y,ball)
+        self._fig = FIRE_FIG
+    
+    def activate(self,grid,paddle,balls):
+        if super().activate():
+            for ball in balls:
+                ball.setFire(True)
+            return True
+        return False
+
+    def deActivate(self,grid,paddle,balls):
+        if super().deActivate():
+            for ball in balls:
+                ball.setFire(False)
             return True
         return False

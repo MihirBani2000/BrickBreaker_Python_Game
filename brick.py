@@ -12,10 +12,16 @@ class Brick(Thing):
         self._lengthY = 3
         
         self._isActive = True
+        self._isVisited = False
+        
+        self._currStren = 0
+        self._maxStren = 0
+
+        # special types
         self._isGold = False
         self._isExplode = False
         self._isRainbow = False
-        self._isVisited = False
+        
         
     def getPos(self):
         return self._x, self._y
@@ -62,12 +68,12 @@ class Brick(Thing):
     def setVisited(self,val):
         self._isVisited = val
 
-    def explode(self,grid,player):
+    def destroy(self,grid,player):
         # exploding the brick, irrespective of type
-        self.__currStren = 0
-        self.__color = Back.BLACK
+        self._currStren = 0
+        self._color = Back.BLACK
         self.erase(grid)
-        self._isActive = False
+        # self._isActive = False
         self._isVisited = False
         player.updateScores(EXPLODE_SCORE)
         # returns true if brick explodes
@@ -103,10 +109,10 @@ class Brick(Thing):
 
     def getAllNeighbours(self,grid,bricks):
         '''marks all the neighbours of all the exploding bricks in a cluster'''
+        
         if self.isVisited():
             # if visited already return the function
             return
-
         self.setVisited(True)
 
         if not self.isExploding():
@@ -118,6 +124,21 @@ class Brick(Thing):
         if neighbours:
             for brick in neighbours:
                 brick.getAllNeighbours(grid,bricks)
+
+    def destroyNeighbours(self,grid,bricks,player):
+        if bricks:
+            for brick in bricks:
+                if brick.isVisited() and brick.isActive():
+                    brick.destroy(grid,player)
+        return
+
+    def explode(self,grid,player,powerups,bricks):
+        self._isExplode = True
+        self._currStren = 0
+        self._color = Back.BLACK
+        self.getAllNeighbours(grid,bricks)
+        self.destroyNeighbours(grid,bricks,player)
+        return True
 
 
 # color of the bricks defines the current strength of the brick
@@ -134,32 +155,32 @@ class RedBrick(Brick):
     '''
     def __init__(self, grid,x, y):
         super().__init__(x, y)
-        self.__maxStren = 3
-        self.__currStren = self.__maxStren
-        self.__color = Back.RED
-        self._fig = super().makeBrick(self.__color)
+        self._maxStren = 3
+        self._currStren = self._maxStren
+        self._color = Back.RED
+        self._fig = super().makeBrick(self._color)
         super().placeBrick(grid,x,y,self._fig)
     
     def handleCollide(self,grid,player,powerups):
 
-        if self.__maxStren - self.__currStren == 0:
+        if self._maxStren - self._currStren == 0:
             # first time of collision
-            self.__currStren -= 1
-            self.__color = Back.CYAN
-            self._fig = super().makeBrick(self.__color)
+            self._currStren -= 1
+            self._color = Back.CYAN
+            self._fig = super().makeBrick(self._color)
             super().placeBrick(grid,self._x,self._y,self._fig)
 
-        elif self.__maxStren - self.__currStren == 1:
+        elif self._maxStren - self._currStren == 1:
             # second time collision
-            self.__currStren -= 1
-            self.__color = Back.GREEN
-            self._fig = super().makeBrick(self.__color)
+            self._currStren -= 1
+            self._color = Back.GREEN
+            self._fig = super().makeBrick(self._color)
             super().placeBrick(grid,self._x,self._y,self._fig)
 
-        elif self.__maxStren - self.__currStren == 2:
+        elif self._maxStren - self._currStren == 2:
             # third time collision
-            self.__currStren = 0
-            self.__color = Back.BLACK
+            self._currStren = 0
+            self._color = Back.BLACK
             self.erase(grid)
             self._isActive = False
             return True # returns true if brick broke
@@ -171,25 +192,25 @@ class CyanBrick(Brick):
     '''
     def __init__(self, grid,x, y):
         super().__init__(x, y)
-        self.__maxStren = 2
-        self.__currStren = self.__maxStren
-        self.__color = Back.CYAN
-        self._fig = super().makeBrick(self.__color)
+        self._maxStren = 2
+        self._currStren = self._maxStren
+        self._color = Back.CYAN
+        self._fig = super().makeBrick(self._color)
         super().placeBrick(grid,x,y,self._fig)
     
     def handleCollide(self,grid,player,powerups):
 
-        if self.__maxStren - self.__currStren == 0:
+        if self._maxStren - self._currStren == 0:
             # first time of collision
-            self.__currStren -= 1
-            self.__color = Back.GREEN
-            self._fig = super().makeBrick(self.__color)
+            self._currStren -= 1
+            self._color = Back.GREEN
+            self._fig = super().makeBrick(self._color)
             super().placeBrick(grid,self._x,self._y,self._fig)
 
-        elif self.__maxStren - self.__currStren == 1:
+        elif self._maxStren - self._currStren == 1:
             # second time collision
-            self.__currStren = 0
-            self.__color = Back.BLACK
+            self._currStren = 0
+            self._color = Back.BLACK
             self.erase(grid)
             self._isActive = False
             return True # returns true if brick broke
@@ -200,18 +221,18 @@ class GreenBrick(Brick):
     '''
     def __init__(self, grid,x, y):
         super().__init__(x, y)
-        self.__maxStren = 1
-        self.__currStren = self.__maxStren
-        self.__color = Back.GREEN
-        self._fig = super().makeBrick(self.__color)
+        self._maxStren = 1
+        self._currStren = self._maxStren
+        self._color = Back.GREEN
+        self._fig = super().makeBrick(self._color)
         super().placeBrick(grid,x,y,self._fig)
     
     def handleCollide(self,grid,player,powerups):
 
-        if self.__maxStren - self.__currStren == 0:
+        if self._maxStren - self._currStren == 0:
             # first time of collision
-            self.__currStren = 0
-            self.__color = Back.BLACK
+            self._currStren = 0
+            self._color = Back.BLACK
             self.erase(grid)
             self._isActive = False
             return True # returns true if brick broke
@@ -224,50 +245,17 @@ class GoldBrick(Brick):
     def __init__(self, grid,x, y):
         super().__init__(x, y)
         self._isGold = True
-        self.__maxStren = 10
-        self.__currStren = self.__maxStren
-        self.__color = Back.YELLOW + Style.BRIGHT
-        self._fig = super().makeBrick(self.__color,char='#')
+        self._maxStren = 10
+        self._currStren = self._maxStren
+        self._color = Back.YELLOW + Style.BRIGHT
+        self._fig = super().makeBrick(self._color,char='#')
         super().placeBrick(grid,x,y,self._fig)
     
     def handleCollide(self,grid,player,powerups):
         # dont do anything
         return 
 
-class ExplodingBrick(Brick):
-    '''ExplodingBrick class
-    Exploding brick is the brick, with White color and explodes on collision
-    also explodes the nearby bricks
-    '''
-    def __init__(self, grid,x, y):
-        super().__init__(x, y)
-        self._isExplode = True
-        self.__maxStren = 1
-        self.__currStren = self.__maxStren
-        self.__color = Back.WHITE + Style.BRIGHT
-        self._fig = super().makeBrick(self.__color,char = Fore.BLACK + '*')
-        super().placeBrick(grid,x,y,self._fig)
-    
 
-    def destroyNeighbours(self,grid,bricks,player):
-        if bricks:
-            for brick in bricks:
-                if brick.isVisited() and brick.isActive():
-                    brick.explode(grid,player)
-        return
-
-
-    def handleCollide(self,grid,player,powerups,bricks):
-        if self.__maxStren - self.__currStren == 0:
-            # first time of collision
-            self.__currStren = 0
-            self.__color = Back.BLACK
-            self.getAllNeighbours(grid,bricks)
-            self.destroyNeighbours(grid,bricks,player)
-            return True
-        return False
-
-    
 class RainbowBrick(Brick):
     '''RainbowBrick class
     rainbow brick changes between Red, Cyan and Green Brick 
@@ -304,3 +292,34 @@ class RainbowBrick(Brick):
             newBrick = RedBrick(grid,self._x,self._y)
 
         return newBrick # returns new brick formed if rainbowBrick is collided 
+
+
+class ExplodingBrick(Brick):
+    '''ExplodingBrick class
+    Exploding brick is the brick, with White color and explodes on collision
+    also explodes the nearby bricks
+    '''
+    def __init__(self, grid,x, y):
+        super().__init__(x, y)
+        self._isExplode = True
+        self._maxStren = 1
+        self._currStren = self._maxStren
+        self._color = Back.WHITE + Style.BRIGHT
+        self._fig = super().makeBrick(self._color,char = Fore.BLACK + '*')
+        super().placeBrick(grid,x,y,self._fig)
+    
+
+    def handleCollide(self,grid,player,powerups,bricks):
+        if self._maxStren - self._currStren == 0:
+            # first time of collision
+            self._currStren = 0
+            self._color = Back.BLACK
+            self.getAllNeighbours(grid,bricks)
+            self.destroyNeighbours(grid,bricks,player)
+            return True
+        return False
+    
+
+
+
+

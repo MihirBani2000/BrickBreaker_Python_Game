@@ -24,6 +24,9 @@ class Ball(Thing):
         # for thru ball powerup
         self.__isThru = False     
 
+        # for fire ball powerup
+        self.__isFire = False     
+
         # the ball in the beginning starts at top of the paddle
         self.__onPaddle = onPaddle
         # if onPaddle == True:
@@ -49,6 +52,12 @@ class Ball(Thing):
     
     def setThru(self,val):
         self.__isThru = val
+
+    def isFire(self):
+        return self.__isFire
+    
+    def setFire(self,val):
+        self.__isFire = val
 
     def setPaddleOffset(self,val):
         self.__paddleOffset = val
@@ -191,8 +200,13 @@ class Ball(Thing):
                         if brick.isExploding():
                             break_flag = brick.handleCollide(grid,player,powerups,bricks)
                         else:
-                            break_flag = brick.explode(grid,player)
-
+                            break_flag = brick.destroy(grid,player)
+                    if self.isFire():
+                        # if fire ball
+                        if brick.isExploding():
+                            break_flag = brick.handleCollide(grid,player,powerups,bricks)
+                        else:
+                            break_flag = brick.explode(grid,player,powerups,bricks)
                     else:
                         if brick.isRainbow():
                             player.updateScores(HIT_SCORE)
