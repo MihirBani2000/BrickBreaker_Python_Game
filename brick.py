@@ -22,12 +22,19 @@ class Brick(Thing):
         self._isExplode = False
         self._isRainbow = False
         
+        self.spawnPowerups = True
         
     def getPos(self):
         return self._x, self._y
 
     def getFig(self):
         return self._fig
+
+    def canSpawnPowerups(self):
+        return self.spawnPowerups 
+    
+    def setSpawnPowerups(self,val):
+        self.spawnPowerups = val 
 
     def erase(self, grid,deactivate=True):
         x, y = self._x, self._y

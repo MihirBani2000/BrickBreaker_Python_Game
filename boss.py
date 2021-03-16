@@ -1,6 +1,7 @@
 from config import *
 from thing import *
 from weapon import *
+from brick import *
 
 class Boss(Thing):
     ''' class for the Boss'''
@@ -26,23 +27,36 @@ class Boss(Thing):
     def isDead(self):
         return self._dead
             
+    def spawnBricks(self,grid,y,bricks,type):
+        br_xlen,br_ylen = bricks[0].getLength()
+
+        for i in range(1,20):
+            if type == 'green':
+                brick = GreenBrick(grid, i * (br_xlen)+1, y)
+            elif type=='cyan':
+                brick = CyanBrick(grid, i * (br_xlen)+1, y)
+            elif type=='red':
+                brick = RedBrick(grid, i * (br_xlen)+1, y)
+            
+            brick.setSpawnPowerups(False)
+            bricks.append(brick)
+
     def handleCollide(self,grid,player,bricks):
         if SOUND_EFFECTS:
             os.system("aplay -q Collision.wav &")
 
-        # self.reduceHealth(grid,player,bricks)
         # reducing the health on collision
         if not self._dead:
             self._health -= 1
             if self._health > 0:
                 player.updateScores(BOSS_HIT_SCORE)
 
-                if self._health == 1:
-                    # spawnBricks(grid,bricks)
-                    pass
+                if self._health == 3:
+                    self.spawnBricks(grid,6,bricks,'green')
+                    # pass
                 elif self._health == 2:
-                    # spawnBricks(grid,bricks)
-                    pass
+                    self.spawnBricks(grid,3,bricks,'cyan')
+                    # pass
             else:
                 player.updateScores(BOSS_BREAK_SCORE)
                 self._dead = True

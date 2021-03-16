@@ -205,7 +205,7 @@ class Ball(Thing):
                             if break_flag:
                                 player.updateScores(BREAK_SCORE)
 
-                    if break_flag:
+                    if break_flag and brick.canSpawnPowerups():
                         spawnPowerups(bX+int(bX_len/2),bY+int(bY_len/2),powerups,self)
         
         if tempbricks:

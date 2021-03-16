@@ -2,8 +2,8 @@ import random
 
 from config import *
 from powerups import *
-from brick import *
-
+from brick import Brick, CyanBrick, ExplodingBrick, GoldBrick, GreenBrick, RainbowBrick, RedBrick, 
+# from brick import *
 
 def reposition_cursor(x=0,y=0):
     '''to keep the cursor at the same place (x,y)'''
