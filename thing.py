@@ -41,21 +41,27 @@ class Thing():
     
     def checkCollisionWall(self, x, y):
         speedX, speedY = self._speedX, self._speedY
-
+        flag = False
         if x < LEFTWALL:   # left wall
             x = LEFTWALL
             self._x = x
             speedX = -speedX
+            flag = True
 
         elif x > BOX_WIDTH - 1:   # right wall
             x = BOX_WIDTH - 1
             self._x = x
             speedX = -speedX
+            flag = True
 
         if y < 1:     # top wall
             y = 1
             self._y = y
             speedY = -speedY
+            flag = True
 
+        if flag and SOUND_EFFECTS:
+            os.system("aplay -q Collision.wav &")
+            
         self._speedX, self._speedY = speedX, speedY
         return x, y

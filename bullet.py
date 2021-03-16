@@ -52,6 +52,8 @@ class Bullet(Thing):
                     brick_flag = True
 
                 if brick_flag:
+                    if SOUND_EFFECTS:
+                        os.system("aplay -q Collision.wav &")
                     break_flag = False
                     # on collision
                     if brick.isRainbow():

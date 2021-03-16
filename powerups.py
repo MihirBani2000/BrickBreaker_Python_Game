@@ -62,6 +62,8 @@ class Powerup(Thing):
             # within the x coordinates of paddle
             if y > HEIGHT - 3:
                 # Colliding with the paddle
+                if SOUND_EFFECTS:
+                        os.system("aplay -q Collision.wav &")
                 self._y = HEIGHT - 3
                 if isMultiple:
                     ball_list = self.activate(grid,paddle,balls)
