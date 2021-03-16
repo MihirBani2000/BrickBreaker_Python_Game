@@ -218,8 +218,68 @@ class Ball(Thing):
             self._speedX, self._speedY = speedX, speedY
         return x,y
 
-    def placeBall(self, grid, x, y, paddle,bricks,player,powerups,falling_flag=False):
+    def checkCollisionBoss(self,grid, x, y, boss, bricks,player):
+        speedX, speedY = self._speedX, self._speedY
 
+        if not boss.isDead():
+            # conditions for checking the collision of ball with boss
+            boss_flag = False
+            bX,bY = boss.getPos()
+            bX_len, bY_len = boss.getLength()
+            
+            mean_x = self._x + (self._speedX)/2
+            mean_y = self._y + (self._speedY)/2
+            sec_mean_x = self._x + (self._speedX)/4
+            sec_mean_y = self._y + (self._speedY)/4
+            
+            inside_flag = (bX <= x < bX + bX_len) and (bY <= y < bY + bY_len)
+            mean_inside_flag = (bX <= mean_x < bX + bX_len) and (bY <= mean_y < bY + bY_len)
+            sec_mean_inside_flag = (bX <= sec_mean_x < bX + bX_len) and (bY <= sec_mean_y < bY + bY_len)
+
+            if inside_flag or mean_inside_flag or sec_mean_inside_flag:
+                # ball going inside the boss
+
+                if bY - 1 <= self._y <= bY + bY_len:
+                    if (self._x < bX) and (grid[bY,bX-1] == ' ' or grid[bY,bX-1] == self._fig):
+                        # left side
+                        speedX = -speedX
+                        x = bX-1
+                        y = int(mean_y)
+                        boss_flag = True
+
+                    elif (self._x >= bX + bX_len) and (grid[bY,bX+bX_len] == ' ' or grid[bY,bX+bX_len] == self._fig):
+                        # right side
+                        speedX = -speedX
+                        x = bX + bX_len
+                        y = int(mean_y)
+                        boss_flag = True
+
+                if not boss_flag and (bX-1 <= self._x <= bX + bX_len + 1):
+                    if self._y >= bY+bY_len:
+                        # bottom
+                        speedY = -speedY
+                        y = bY + bY_len
+                        x = int(mean_x)
+                        boss_flag = True
+                    
+                    elif self._y <= bY:
+                        # top
+                        speedY = -speedY
+                        y = bY-1
+                        x = int(mean_x)
+                        boss_flag = True
+
+            if boss_flag:
+                boss.handleCollide(grid,player,bricks)
+            
+        self._speedX, self._speedY = speedX, speedY
+        
+        return x,y
+
+    def placeBall(self, grid, x, y, paddle,bricks,player,powerups,boss=None,falling_flag=False):
+
+        if boss!=None:
+            x,y = self.checkCollisionBoss(grid,x,y,boss,bricks,player)
         temp_x,temp_y = self.checkCollisionBricks(grid,x,y,bricks,player,powerups)
         temp1_x,temp1_y = self.checkCollisionWall(temp_x,temp_y)
         self._x,self._y = self.checkCollisionPaddle(grid,temp1_x,temp1_y,paddle,bricks,player,falling_flag)
@@ -234,7 +294,7 @@ class Ball(Thing):
         self._x = x
         grid[self._y, x] = self._fig
 
-    def move(self, grid, paddle,bricks,player,powerups,falling_flag=False):
+    def move(self, grid, paddle,bricks,player,powerups,boss=None,falling_flag=False):
 
         if self.__onPaddle:
             # if the brick is on the paddle, grabbed, or in startup
@@ -247,7 +307,7 @@ class Ball(Thing):
         self.erase(grid)
 
         # placing the ball at the required coordinates after checking collisions
-        self.placeBall(grid, newX, newY, paddle,bricks,player,powerups,falling_flag)
+        self.placeBall(grid, newX, newY, paddle,bricks,player,powerups,boss,falling_flag)
 
     def split(self,grid,paddle):
         onPaddle = self.isOnPaddle()

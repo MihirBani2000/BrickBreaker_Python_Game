@@ -21,11 +21,14 @@ class Thing():
     def getPosX(self):
         return self._x
 
-    def getSpeed(self):
-        return self._speedX, self._speedY
-
     def getPosY(self):
         return self._y
+
+    def getPos(self):
+        return self._x,self._y
+
+    def getSpeed(self):
+        return self._speedX, self._speedY
 
     def getLength(self):
         return self._lengthX, self._lengthY

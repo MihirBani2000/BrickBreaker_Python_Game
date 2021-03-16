@@ -24,17 +24,20 @@ CYAN = Fore.CYAN
 
 # -------------------------------------------------------------------
 # Game
-SOUND_EFFECTS = True
+SOUND_EFFECTS = False
 LEVELS = 3
 MAX_LIVES = 5
-GAME_TIME = 210     # seconds
-POWER_TIME = 15     # 15 seconds for a powerup
-FALLING_BRICK_TIME = 120     # falling bricks when time passed is FALLING_BRICK_TIME 
-SHOOTING_INTERVAL = 2     # shoots bullet only after this time 
-HIT_SCORE = 10      # 10 points on hitting any brick
-BREAK_SCORE = 20    # 20 points on breaking any brick
+GAME_TIME = 210             # seconds
+POWER_TIME = 15             # 15 seconds for a powerup
+FALLING_BRICK_TIME = 120    # falling bricks when time passed is FALLING_BRICK_TIME 
+SHOOTING_INTERVAL = 2       # shoots bullet only after this time 
+BOMB_INTERVAL = 10          # drops bomb only after this time 
+HIT_SCORE = 10              # 10 points on hitting any brick
+BOSS_HIT_SCORE = 30         # 30 points on hitting boss
+BOSS_BREAK_SCORE = 100      # 100 points on defeating boss
+BREAK_SCORE = 20            # 20 points on breaking any brick
 EXPLODE_SCORE = HIT_SCORE + BREAK_SCORE    # points on exploding/thru any brick
-LIFE_PENALTY = -30  # 30 points penalty in case of losing a life
+LIFE_PENALTY = -30          # 30 points penalty in case of losing a life
 
 # Brick Types
 # GOLD_BR = "Y"
@@ -67,7 +70,7 @@ FIRE_FIG = Back.BLUE + WHITE + BOLD + 'I' + RESET
 MULITPLE_FIG = Back.BLUE + WHITE + BOLD + 'M' + RESET
 
 # sizes
-HEIGHT = 30
+HEIGHT = 33
 WIDTH = 150
 LEFTWALL = 2
 RIGHTWALL = 2

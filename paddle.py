@@ -1,5 +1,6 @@
 from config import *
-from thing import Thing
+from thing import *
+from weapon import *
 
 class Paddle(Thing):
     ''' class for the Paddle'''
@@ -77,3 +78,12 @@ class Paddle(Thing):
         newX = self._x - self._stepX
         self.erase(grid)
         self.placePaddle(grid, newX)
+
+    def shootBullets(self,grid,bullets):
+        x1, y1 = self._x, self._y 
+        pL = self._lengthX
+        x2 = x1 + pL - 1
+        bullet1 = Bullet(x1,y1-1, grid)
+        bullets.append(bullet1)
+        bullet2 = Bullet(x2,y1-1, grid)
+        bullets.append(bullet2)

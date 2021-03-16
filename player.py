@@ -68,29 +68,27 @@ class Player():
               + Back.WHITE + Fore.BLACK +" ".center(12) + RESET)
         
         print(
-            Back.RED +
-            Fore.WHITE +
-            Style.BRIGHT +
+            Back.RED + Fore.WHITE + Style.BRIGHT +
             "Lives Left: {}         Score: {}         Time left: {} ".format(
                 self.getLives(),
                 self.getScores(),
-                self.getTimer()).center(WIDTH) +
-            RESET)
-
+                self.getTimer()).center(WIDTH)
+                + RESET,
+            )
+        
         shootPaddleTime = 0
         for power in powerups:
             if isinstance(power,ShootPaddle):
                 shootPaddleTime =  POWER_TIME - round(time.time() - power.getTime())
         
         bossLives = 0
-        # if boss:
-        #     if isinstance(power,ShootPaddle):
-        #         shootPaddleTime = round(time.time() - power.getTime())
-
+        if boss:
+            bossLives = boss.getHealth()
+            
         print(
             Back.RED + Fore.WHITE + Style.BRIGHT +
-            "Shooting Paddle Time Left: {}         Boss Lives Left: {}".format(
-                shootPaddleTime, self.getTimer()).center(WIDTH) + RESET
+            "Shooting Paddle Time Left: {}         Boss Lives: {}".format(
+                shootPaddleTime, bossLives).center(WIDTH) + RESET
             )
 
     def showmessage(self, msg):

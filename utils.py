@@ -67,7 +67,10 @@ def chooseLayout(bricks,grid,level):
         printLayout(bricks,grid,layout,0,0)
     if option == 3:
         '''Layout 3'''
-        layout = [  "- - - - - - G Y R C G R C R Y G - - - - -",
+        layout = [  
+                    "- - - - - - - - - - - - - - - - - - - - -",
+                    "- - - - - - - - - - - - - - - - - - - - -",
+                    # "- - - - - - G Y R C G R C R Y G - - - - -",
                     "- - - - A Y C A G Y R G Y G A C Y A - - -",
                     "- - - - A G - G - - A A - - G - G A - - -",
                     "- - - - A R C Y E E E E E E Y C R A - - -",
@@ -315,14 +318,14 @@ def delBalls(balls):
                 balls.remove(ball)
                 # del ball
 
-# BULLETS related
-def delBullets(bullets):
-    '''to delete the balls which are not active anymore'''
-    if bullets:
-        delbullet = []
-        for bullet in bullets:
-            if bullet.isOutOfScreen():
-                delbullet.append(bullet)
-        if delbullet:
-            for bullet in delbullet:
-                bullets.remove(bullet)
+# BULLETS and BOMBS related
+def delItems(items):
+    '''to delete the items (like bullets, bombs) which are not active anymore'''
+    if items:
+        delitem = []
+        for item in items:
+            if item.isOutOfScreen():
+                delitem.append(item)
+        if delitem:
+            for item in delitem:
+                items.remove(item)

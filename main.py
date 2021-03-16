@@ -13,7 +13,8 @@ from ball import *
 from paddle import *
 from player import *
 from powerups import *
-from bullet import *
+from weapon import *
+from boss import *
 
 def action(ch,level):
     """takes action according to the keyboard input"""
@@ -25,9 +26,15 @@ def action(ch,level):
     if ch == 'd':
         myPaddle.moveRight(myGrid.getGrid())
     
+        if level==LEVELS:
+            myBoss.moveRight(myGrid.getGrid())
+    
     # move the paddle left
     elif ch == 'a':
         myPaddle.moveLeft(myGrid.getGrid())
+    
+        if level==LEVELS:
+            myBoss.moveLeft(myGrid.getGrid())
     
     # release the ball, if on paddle
     if ch == ' ':
@@ -66,6 +73,14 @@ if __name__ == '__main__':
         myPaddle = Paddle(random_x, HEIGHT - 2)
         myPaddle.placePaddle(myGrid.getGrid(), random_x)
         
+        # Initialize the boss in final level
+        if level==LEVELS:
+            myBoss = Boss(random_x, 1)
+            myBoss.placeBoss(myGrid.getGrid(), random_x)
+        else:
+            myBoss = None
+        bombs = []
+        
         # Initialize the ball
         balls = []
         rand_x_ball = random.randint(0, myPaddle.getLength() - 1)
@@ -92,6 +107,7 @@ if __name__ == '__main__':
         curr_time = time.time()
         seconds_time = time.time()
         bullet_start_time = time.time()
+        bomb_start_time = time.time()
         myPlayer.setTimer(GAME_TIME)
 
         # main loop of the game
@@ -134,18 +150,19 @@ if __name__ == '__main__':
                     temp_diff = time.time() - bullet_start_time
                     if SHOOTING_INTERVAL <= temp_diff:
                         bullet_start_time = time.time()
-                        x1,y1 = myPaddle.getPosX(), myPaddle.getPosY() 
-                        pL = myPaddle.getLength()
-                        x2 = x1 + pL - 1
-                        bullet1 = Bullet(x1,y1-1, myGrid.getGrid())
-                        bullets.append(bullet1)
-                        bullet2 = Bullet(x2,y1-1, myGrid.getGrid())
-                        bullets.append(bullet2)
+                        myPaddle.shootBullets(myGrid.getGrid(),bullets) 
+                        # x1,y1 = myPaddle.getPosX(), myPaddle.getPosY() 
+                        # pL = myPaddle.getLength()
+                        # x2 = x1 + pL - 1
+                        # bullet1 = Bullet(x1,y1-1, myGrid.getGrid())
+                        # bullets.append(bullet1)
+                        # bullet2 = Bullet(x2,y1-1, myGrid.getGrid())
+                        # bullets.append(bullet2)
                 else:
                     bullet_start_time = time.time() - SHOOTING_INTERVAL
 
                 # delete the old bullets
-                delBullets(bullets)
+                delItems(bullets)
                 
                 # if the last/only ball is out of the screen
                 delBalls(balls)
@@ -167,28 +184,38 @@ if __name__ == '__main__':
                 if myPlayer.isGameOver():
                     exit()
 
+                if level==LEVELS:
+                # if its the final level
+                    
+                    # dropping bombs
+                    temp_diff = time.time() - bomb_start_time
+                    if BOMB_INTERVAL <= temp_diff:
+                        bomb_start_time = time.time()
+                        myBoss.dropBombs(myGrid.getGrid(),bombs) 
+                    
+                    # delete the old bombs
+                    delItems(bombs)
+
+                    if bombs:
+                        for bomb in bombs:
+                            # moving the bomb to correct place
+                            bomb.move(myGrid.getGrid(),myPaddle,myPlayer)
+                
                 for ball in balls:
-                    # moving the ball to correct place
-                    ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups,falling_flag)
+                # moving the ball to correct place
+                    ball.move(myGrid.getGrid(), myPaddle,bricks,myPlayer,powerups,myBoss,falling_flag)
 
                 if bullets:
                     for bullet in bullets:
-                        # moving the ball to correct place
-                        bullet.move(myGrid.getGrid(),bricks,myPlayer,powerups)
-
+                        # moving the bullet to correct place
+                        bullet.move(myGrid.getGrid(),bricks,myPlayer,powerups,myBoss)
                 
                 # delete the inactive bricks
                 deleteBricks(bricks)
 
-                # print the rest bricks
+                # print the remaining bricks
                 printBricks(myGrid.getGrid(),bricks,myPlayer,myPaddle) 
-                # step = 0
-                # fall_diff = time.time() - fallingBrick_time
-                # if FALLING_BRICK_TIME-0.1 <= fall_diff <=FALLING_BRICK_TIME+0.1:
-                #     step = 1
-                #     fallingBrick_time = time.time()
-                # printBricks(myGrid.getGrid(),bricks,myPlayer,myPaddle,step) 
-
+                
                 # if all the bricks are destroyed - VICTORY
                 if not leftBricks(bricks):
                     if level<LEVELS:
@@ -201,7 +228,7 @@ if __name__ == '__main__':
                     exit()
                 
                 # print the stats and the top header of the game session
-                myPlayer.showStats(myPaddle,activatedPowerups)
+                myPlayer.showStats(myPaddle,activatedPowerups,myBoss)
                 myBox.createBox(myGrid.getGrid())
                 myGrid.printGrid()
 
