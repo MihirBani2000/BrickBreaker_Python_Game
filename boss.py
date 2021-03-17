@@ -1,3 +1,4 @@
+from numpy.lib.index_tricks import ndenumerate
 from config import *
 from thing import *
 from weapon import *
@@ -12,14 +13,25 @@ class Boss(Thing):
         # step length while moving
         self._stepX = 3
 
-        self._lengthX = 11
-        self._lengthY = 2
+        
 
         self._health = 5
         self._dead = False
 
-        self._fig = np.full(
-            (self._lengthY, self._lengthX), YELLOW + '=' + RESET, dtype='<U20')
+        self._fig = [
+                        list("  //-A-\\\\  "),
+                        list(" _--=_=--_ "),
+                        list("(=_\/.\/_=)")
+                        # list(" (-\_O_/-) ")
+                    ]
+        self._fig = np.array(self._fig, dtype='<U20')
+        self._lengthX = self._fig.shape[1]
+        self._lengthY = self._fig.shape[0]
+        
+        for y,ele_y in enumerate(self._fig):
+            for x,ele_x in enumerate(ele_y):
+                self._fig[y,x] = YELLOW + ele_x + RESET
+
 
     def getHealth(self):
         return self._health
@@ -44,6 +56,8 @@ class Boss(Thing):
     def handleCollide(self,grid,player,bricks):
         if SOUND_EFFECTS:
             os.system("aplay -q Collision.wav &")
+        # self.spawnBricks(grid,7,bricks,'green')
+        # self.spawnBricks(grid,4,bricks,'cyan')
 
         # reducing the health on collision
         if not self._dead:
@@ -52,10 +66,10 @@ class Boss(Thing):
                 player.updateScores(BOSS_HIT_SCORE)
 
                 if self._health == 3:
-                    self.spawnBricks(grid,6,bricks,'green')
+                    self.spawnBricks(grid,7,bricks,'green')
                     # pass
                 elif self._health == 2:
-                    self.spawnBricks(grid,3,bricks,'cyan')
+                    self.spawnBricks(grid,4,bricks,'cyan')
                     # pass
             else:
                 player.updateScores(BOSS_BREAK_SCORE)

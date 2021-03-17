@@ -2,7 +2,7 @@ import random
 
 from config import *
 from powerups import *
-from brick import Brick, CyanBrick, ExplodingBrick, GoldBrick, GreenBrick, RainbowBrick, RedBrick, 
+from brick import Brick, CyanBrick, ExplodingBrick, GoldBrick, GreenBrick, RainbowBrick, RedBrick
 # from brick import *
 
 def reposition_cursor(x=0,y=0):
@@ -10,7 +10,7 @@ def reposition_cursor(x=0,y=0):
     print("\033[%d;%dH" % (x, y))
 
 
-def printLayout(bricks,grid,layout,xoffset=0,yoffset=1,custom=None):
+def printLayout(bricks,grid,layout,xgap=0,ygap=1,yoffset=0,custom=None):
     '''prints the initial brick layout, based on input Layout list'''
     obj_brick = Brick()
     br_xlen,br_ylen = obj_brick.getLength()
@@ -22,20 +22,20 @@ def printLayout(bricks,grid,layout,xoffset=0,yoffset=1,custom=None):
             # print("rind",rind, " cind",cind)
             brick = None
             if char == 'A': #rainbow
-                brick = RainbowBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+                brick = RainbowBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+ygap)+3+yoffset)
             elif char == 'G': #green
-                brick = GreenBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+                brick = GreenBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+ygap)+3+yoffset)
             elif char == 'R': #red
-                brick = RedBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+                brick = RedBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+ygap)+3+yoffset)
             elif char == 'C': #cyan
-                brick = CyanBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+                brick = CyanBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+ygap)+3+yoffset)
             elif char == 'Y': #gold
-                brick = GoldBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+                brick = GoldBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+ygap)+3+yoffset)
             elif char == 'E': # exploding
                 if custom != None:
-                    brick = ExplodingBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+custom)+3)
+                    brick = ExplodingBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+custom)+3+yoffset)
                 else:
-                    brick = ExplodingBrick(grid, cind * (br_xlen+xoffset), rind*(br_ylen+yoffset)+3)
+                    brick = ExplodingBrick(grid, cind * (br_xlen+xgap), rind*(br_ylen+ygap)+3+yoffset)
             if brick!=None:
                 bricks.append(brick)
 
@@ -70,13 +70,12 @@ def chooseLayout(bricks,grid,level):
         layout = [  
                     "- - - - - - - - - - - - - - - - - - - - -",
                     "- - - - - - - - - - - - - - - - - - - - -",
-                    # "- - - - - - G Y R C G R C R Y G - - - - -",
                     "- - - - A Y C A G Y R G Y G A C Y A - - -",
                     "- - - - A G - G - - A A - - G - G A - - -",
                     "- - - - A R C Y E E E E E E Y C R A - - -",
                     "- - - - - - R Y Y Y Y Y Y Y Y R - - - - -"
                 ]
-        printLayout(bricks,grid,layout,yoffset=0)
+        printLayout(bricks,grid,layout,ygap=0,yoffset=1)
 
 
 # def chooseLayout(bricks,grid):
