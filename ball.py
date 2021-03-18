@@ -89,7 +89,7 @@ class Ball(Thing):
                 # Colliding with the paddle
                 # if the ball is not sticky, then only change the velocity, otherwise make it zero.
                 if SOUND_EFFECTS:
-                    os.system("aplay -q Collision.wav &")
+                    os.system("aplay -q ./music/Collision.wav &")
                 if self.isSticky():
                     speedY = 0
                     speedX = 0
@@ -175,7 +175,7 @@ class Ball(Thing):
 
                 if brick_flag:
                     if SOUND_EFFECTS:
-                        os.system("aplay -q Collision.wav &")
+                        os.system("aplay -q ./music/Collision.wav &")
                     break_flag = False
                     # on collision
                     if self.isThru():
@@ -270,6 +270,8 @@ class Ball(Thing):
                         boss_flag = True
 
             if boss_flag:
+                if SOUND_EFFECTS:
+                    os.system("aplay -q ./music/Collision.wav &")
                 boss.handleCollide(grid,player,bricks)
             
         self._speedX, self._speedY = speedX, speedY
@@ -312,6 +314,8 @@ class Ball(Thing):
     def split(self,grid,paddle):
         onPaddle = self.isOnPaddle()
         if not onPaddle:
+            if SOUND_EFFECTS:
+                os.system("aplay -q ./music/Blink.wav &")
             newball = Ball(self._x,self._y,grid,onPaddle)
             self._speedX = int(self._speedX/2)
             if self._speedX == 0:

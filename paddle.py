@@ -87,3 +87,6 @@ class Paddle(Thing):
         bullets.append(bullet1)
         bullet2 = Bullet(x2,y1-1, grid)
         bullets.append(bullet2)
+        if SOUND_EFFECTS:
+            os.system("aplay -q ./music/Bullet.wav &")
+

@@ -55,7 +55,7 @@ class Boss(Thing):
 
     def handleCollide(self,grid,player,bricks):
         if SOUND_EFFECTS:
-            os.system("aplay -q Collision.wav &")
+            os.system("aplay -q ./music/Collision.wav &")
         # self.spawnBricks(grid,7,bricks,'green')
         # self.spawnBricks(grid,4,bricks,'cyan')
 
@@ -103,4 +103,6 @@ class Boss(Thing):
             x1 = self._x + self._lengthX//2
             y1 = self._y + self._lengthY 
             bomb = Bomb(x1,y1, grid)
+            if SOUND_EFFECTS:
+                os.system("aplay -q ./music/Bullet.wav &")
             bombs.append(bomb)

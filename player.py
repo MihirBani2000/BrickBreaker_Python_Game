@@ -43,12 +43,12 @@ class Player():
             self.__lives -= 1
             self.updateScores(LIFE_PENALTY)
             if SOUND_EFFECTS:
-                os.system("aplay -q Life_lost.wav &")
+                os.system("aplay -q ./music/Life_lost.wav &")
         else:
             # showmessage(LIVES_OVER, self)
             self.GameOver(LIVES_OVER)
 
-    def showStats(self,paddle,powerups,boss = None):
+    def showStats(self,paddle,powerups,level,boss = None):
         print(
             Back.RED +
             Fore.WHITE +
@@ -69,10 +69,11 @@ class Player():
         
         print(
             Back.RED + Fore.WHITE + Style.BRIGHT +
-            "Lives Left: {}         Score: {}         Time left: {} ".format(
+            "Lives Left: {}         Score: {}         Time left: {}         Level: {}  ".format(
                 self.getLives(),
                 self.getScores(),
-                self.getTimer()).center(WIDTH)
+                self.getTimer(),
+                level).center(WIDTH)
                 + RESET,
             )
         
@@ -99,7 +100,7 @@ class Player():
         print("\n\n")
         if msg == TIME_OVER:
             if SOUND_EFFECTS:
-                os.system("aplay -q Lose.wav &")
+                os.system("aplay -q ./music/Lose.wav &")
             print(Fore.RED +
                   "\t\t\t _______  ___   __   __  _______    __   __  _______\n" +
                   "\t\t\t|       ||   | |  |_|  ||       |  |  | |  ||   __  |\n" +
@@ -111,7 +112,7 @@ class Player():
 
         elif msg == VICTORY:
             if SOUND_EFFECTS:
-                os.system("aplay -q Win.wav &")
+                os.system("aplay -q ./music/Win.wav &")
             print(Fore.GREEN +
                   "\t\t\t __   __  ___   _______  _______  _______  ______    __   __\n" +
                   "\t\t\t|  | |  ||   | |     __||       ||       ||    _ |  |  | |  |\n" +
@@ -123,7 +124,7 @@ class Player():
 
         elif msg == LIVES_OVER:
             if SOUND_EFFECTS:
-                os.system("aplay -q Lose.wav &")
+                os.system("aplay -q ./music/Lose.wav &")
             print(Fore.RED +
                   "\t\t\t _______  _______  __   __  _______    _______  __   __  _______  ______\n" +
                   "\t\t\t|       ||   _   ||  |_|  ||       |  |       ||  | |  ||       ||    _ |\n" +

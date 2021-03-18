@@ -27,6 +27,8 @@ class Powerup(Thing):
         if not self._isActive:
             self._isActive = True
             self.time = time.time()
+            if SOUND_EFFECTS:
+                os.system("aplay -q ./music/Blink.wav &")
             return True
         return False
 
@@ -63,7 +65,7 @@ class Powerup(Thing):
             if y > HEIGHT - 3:
                 # Colliding with the paddle
                 if SOUND_EFFECTS:
-                        os.system("aplay -q Collision.wav &")
+                    os.system("aplay -q ./music/Collision.wav &")
                 self._y = HEIGHT - 3
                 if isMultiple:
                     ball_list = self.activate(grid,paddle,balls)

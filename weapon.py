@@ -53,7 +53,7 @@ class Bullet(Thing):
 
                 if brick_flag:
                     if SOUND_EFFECTS:
-                        os.system("aplay -q Collision.wav &")
+                        os.system("aplay -q ./music/Collision.wav &")
                     break_flag = False
                     # on collision
                     if brick.isRainbow():
@@ -149,7 +149,7 @@ class Bomb(Thing):
             # within the x coordinates of paddle
             # Colliding with the paddle
                 if SOUND_EFFECTS:
-                    os.system("aplay -q Collision.wav &")
+                    os.system("aplay -q ./music/Collision.wav &")
                     
                 y = HEIGHT - 3
                 player.reduceLife()

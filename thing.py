@@ -64,7 +64,7 @@ class Thing():
             flag = True
 
         if flag and SOUND_EFFECTS:
-            os.system("aplay -q Collision.wav &")
+            os.system("aplay -q ./music/Collision.wav &")
             
         self._speedX, self._speedY = speedX, speedY
         return x, y

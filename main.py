@@ -228,7 +228,7 @@ if __name__ == '__main__':
                     exit()
                 
                 # print the stats and the top header of the game session
-                myPlayer.showStats(myPaddle,activatedPowerups,myBoss)
+                myPlayer.showStats(myPaddle,activatedPowerups,level,myBoss)
                 myBox.createBox(myGrid.getGrid())
                 myGrid.printGrid()
 
