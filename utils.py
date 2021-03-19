@@ -192,17 +192,17 @@ def spawnPowerups(x,y,powerups,ball):
 
         if randChoice == 0:
             power = ShrinkPaddle(x,y,ball)
-        elif randChoice ==1:
+        elif randChoice == 1:
             power = ExpandPaddle(x,y,ball)
-        elif randChoice ==2:
+        elif randChoice == 2:
             power = FastBall(x,y,ball)
-        elif randChoice ==3:
+        elif randChoice == 3:
             power = GrabPaddle(x,y,ball)
-        elif randChoice ==4:
+        elif randChoice == 4:
             power = ThruBall(x,y,ball)
-        elif randChoice ==5:
+        elif randChoice == 5:
             power = FireBall(x,y,ball)
-        elif randChoice ==6:
+        elif randChoice == 6:
             power = ShootPaddle(x,y,ball)
         else:
             power = MultipleBall(x,y,ball)

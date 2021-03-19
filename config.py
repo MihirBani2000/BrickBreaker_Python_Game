@@ -24,7 +24,7 @@ CYAN = Fore.CYAN
 
 # -------------------------------------------------------------------
 # Game
-SOUND_EFFECTS = False
+SOUND_EFFECTS = True       # change to True, for sound effects to work
 LEVELS = 3
 MAX_LIVES = 5
 GAME_TIME = 210             # seconds

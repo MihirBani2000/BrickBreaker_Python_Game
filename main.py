@@ -27,14 +27,14 @@ def action(ch,level):
         myPaddle.moveRight(myGrid.getGrid())
     
         if level==LEVELS:
-            myBoss.moveRight(myGrid.getGrid())
+            myBoss.moveRight(myGrid.getGrid(),balls)
     
     # move the paddle left
     elif ch == 'a':
         myPaddle.moveLeft(myGrid.getGrid())
     
         if level==LEVELS:
-            myBoss.moveLeft(myGrid.getGrid())
+            myBoss.moveLeft(myGrid.getGrid(),balls)
     
     # release the ball, if on paddle
     if ch == ' ':

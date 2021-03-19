@@ -13,9 +13,7 @@ class Boss(Thing):
         # step length while moving
         self._stepX = 3
 
-        
-
-        self._health = 5
+        self._health = 6
         self._dead = False
 
         self._fig = [
@@ -31,7 +29,6 @@ class Boss(Thing):
         for y,ele_y in enumerate(self._fig):
             for x,ele_x in enumerate(ele_y):
                 self._fig[y,x] = YELLOW + ele_x + RESET
-
 
     def getHealth(self):
         return self._health
@@ -65,22 +62,45 @@ class Boss(Thing):
             if self._health > 0:
                 player.updateScores(BOSS_HIT_SCORE)
 
-                if self._health == 3:
+                if self._health == 4:
                     self.spawnBricks(grid,7,bricks,'green')
                     # pass
                 elif self._health == 2:
-                    self.spawnBricks(grid,4,bricks,'cyan')
+                    self.spawnBricks(grid,4,bricks,'green')
                     # pass
             else:
                 player.updateScores(BOSS_BREAK_SCORE)
                 self._dead = True
+                self.erase(grid)
 
-    def placeBoss(self, grid, x):
-
+    def placeBoss(self, grid, x,balls=None):
+        
+        # wall collision
         if x < LEFTWALL:
             x = LEFTWALL
         elif x > BOX_WIDTH - self._lengthX:
             x = BOX_WIDTH - self._lengthX
+        
+        old_XL = self._x + self._lengthX - 1
+        new_XL = x + self._lengthX - 1
+
+        # ball collision
+        if balls:
+            for ball in balls:
+                ballx,bally = ball.getPos()
+                b_speedx,b_speedy = ball.getSpeed()
+                ball.erase(grid)
+
+                if self._y <= bally < self._y + self._lengthY:
+                    if  old_XL <= ballx <= new_XL:
+                    # ball on left side of boss
+                        ball.setPos(new_XL+1, bally)
+                        ball.setSpeed(1, b_speedy,False)
+
+                    elif  x <= ballx <= self._x:
+                    # ball on right side of boss
+                        ball.setPos(x-1, bally)
+                        ball.setSpeed(-1, b_speedy,False)
 
         self._x = x
         if not self._dead:
@@ -88,15 +108,15 @@ class Boss(Thing):
         else:
             grid[self._y: self._y + self._lengthY, self._x: self._x + self._lengthX] = " "
     
-    def moveRight(self, grid):
+    def moveRight(self, grid,balls=None):
         newX = self._x + self._stepX
         self.erase(grid)
-        self.placeBoss(grid, newX)
+        self.placeBoss(grid, newX,balls)
 
-    def moveLeft(self, grid):
+    def moveLeft(self, grid,balls=None):
         newX = self._x - self._stepX
         self.erase(grid)
-        self.placeBoss(grid, newX)
+        self.placeBoss(grid, newX,balls)
 
     def dropBombs(self,grid,bombs):
         if not self._dead:

@@ -62,6 +62,10 @@ class Ball(Thing):
     def setPaddleOffset(self,val):
         self.__paddleOffset = val
 
+    def setPos(self,x,y):
+        self._x = x
+        self._y = y
+
     def setSpeed(self, val,val2=None, multiply=True):
         if multiply:
             if abs(self._speedX * val) <= MAX_SPEED_X:
