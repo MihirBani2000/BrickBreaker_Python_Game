@@ -10,15 +10,19 @@ External libraries used are - `Numpy` and `Colorama`.
 - You control the Paddle, moving it sideways on the screen to bounce the ball.
 - The ball collides with the walls, bricks, and the paddle.
 - The target of the game is to destroy all bricks and make highscore.
+- There are 3 levels with increasing difficulty.
+- In the final level, you have to defeat the boss too.
+- After a time limit, the bricks move one level down, when the ball touches the paddle.
 - **Bricks:** types:
 
-  | Type      | Appearance | Strength | Desription                       |
-  | --------- | :--------: | :------: | -------------------------------- |
-  | Red       |    Red     |    3     |                                  |
-  | Cyan      |    Cyan    |    2     |                                  |
-  | Green     |   Green    |    1     |                                  |
-  | Gold      |   Yellow   |   inf    | indestructible                   |
-  | Exploding |   White    |    1     | explodes all the adjacent bricks |
+  | Type      |   Appearance   | Strength | Desription                          |
+  | --------- | :------------: | :------: | ----------------------------------- |
+  | Red       |      Red       |    3     |                                     |
+  | Cyan      |      Cyan      |    2     |                                     |
+  | Green     |     Green      |    1     |                                     |
+  | Gold      |     Yellow     |   inf    | indestructible                      |
+  | Exploding |     White      |    1     | explodes all the adjacent bricks    |
+  | Rainbow   | Red/Cyan/Green |  3/2/1   | randomly changes strength and color |
 
 - **Max Lives = 5**, whenever you miss the ball towards the bottom of the screen, a life is lost.
 - **Scoring:** scores are calculated as follows:
@@ -28,20 +32,23 @@ External libraries used are - `Numpy` and `Colorama`.
   > - Loosing a life = -30
 
 - **Powerups:**
-  | Type | Appearance | Description |
-  |---------------|:----------:|-----------------------------------------|
-  | Expand Paddle | L | expands the paddle by 2 units |
-  | Shrink Paddle | S | shrinks the paddle by 2 units |
-  | Grab Paddle | G | grabs the ball on the paddle |
-  | Fast Ball | F | increases ball speed |
-  | Thru Ball | T | the ball destroys bricks in path and move past them |
-  | Multiple Ball | M | the number of ball increases by 2 |
+  | Type            | Appearance | Description                                         |
+  | --------------- | :--------: | --------------------------------------------------- |
+  | Expand Paddle   |     L      | expands the paddle by 2 units                       |
+  | Shrink Paddle   |     S      | shrinks the paddle by 2 units                       |
+  | Grab Paddle     |     G      | grabs the ball on the paddle                        |
+  | Shooting Paddle |     B      | makes the paddle shoots bullets                     |
+  | Fast Ball       |     F      | increases ball speed                                |
+  | Thru Ball       |     T      | the ball destroys bricks in path and move past them |
+  | Multiple Ball   |     M      | the number of ball increases by 2                   |
+  | Fire Ball       |     I      | the brick explodes when ball collides               |
 
 ## Controls
 
 - <kbd>A</kbd>: move paddle left
 - <kbd>D</kbd>: move paddle right
 - <kbd>SPACE</kbd>: release ball from paddle
+- <kbd>X</kbd>: Change level
 - <kbd>Q</kbd>: quit
 
 ## Get Set Go
@@ -78,12 +85,15 @@ This game follows the object-oriented programming paradigm. Here's a list of cla
 - Box
 - Thing
   - Ball
+  - Boss
+  - Weapons
+    - Bullet | Bomb
   - Brick
-    - RedBrick | CyanBrick | GreenBrick | GoldBrick | ExplodingBrick
+    - RedBrick | CyanBrick | GreenBrick | GoldBrick | ExplodingBrick | RainbowBrick
   - Paddle
   - Powerup
-    - FastBall | ThruBall | MultipleBall
-    - ExpandPaddle | ShrinkPaddle | GrabPaddle
+    - FastBall | ThruBall | MultipleBall | FireBall
+    - ExpandPaddle | ShrinkPaddle | GrabPaddle | ShootingPaddle
 
 ## Object Oriented Concepts
 
